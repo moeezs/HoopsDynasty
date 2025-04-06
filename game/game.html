@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basketball Game Simulation</title>
+  <link rel="stylesheet" href="game.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="main-container">
+    <!-- Compact Header with Scoreboard -->
+    <div class="game-header">
+      <div class="scoreboard">
+        <span class="team-name">Lakers</span>
+        <span class="score" id="homeScore">90</span>
+        <span class="score-divider">|</span>
+        <span class="score" id="awayScore">87</span>
+        <span class="team-name">Pistons</span>
+      </div>
+    </div>
+    
+    <!-- Court Area with Players at opposite ends -->
+    <div class="court-area">
+      <div class="player-container home-team">
+        <img src="images/players/lebron.png" alt="LeBron James Home" class="player-img">
+        <img src="images/ball.png" alt="Basketball" class="ball-img" id="homeBall">
+      </div>
+      
+      <div class="game-state-indicator" id="stateLabel">OFFENSE</div>
+      
+      <div class="game-info">
+        <div class="possession-indicator" id="ballPossession">LeBron James</div>
+      </div>
+      
+      <div class="player-container away-team">
+        <img src="images/players/lebron.png" alt="LeBron James Away" class="player-img">
+        <img src="images/ball.png" alt="Basketball" class="ball-img" id="awayBall">
+      </div>
+    </div>
+    
+    <!-- Collapsible Game Log -->
+    <div class="game-log collapsed" id="gameLog">
+      <button class="log-toggle" id="logToggle">
+        <i class="fas fa-chevron-right log-toggle-icon" id="logToggleIcon"></i>
+      </button>
+      <div class="log-title">GAME LOG</div>
+      <div class="log-container" id="logEntries">
+        <div class="log-entry">
+          <span class="time">00:00</span> Game started
+        </div>
+      </div>
+    </div>
+    
+    <!-- Full-width Action Panel with Icons -->
+    <div class="action-panel">
+      <!-- Offense Options -->
+      <div class="action-buttons" id="offense-options">
+        <button class="action-btn" data-action="shoot">
+          <i class="fas fa-basketball action-icon"></i>
+          <span class="action-name">SHOOT</span>
+          <span class="chance">(70%)</span>
+        </button>
+        <button class="action-btn" data-action="pass">
+          <i class="fas fa-share action-icon"></i>
+          <span class="action-name">PASS</span>
+          <span class="chance">(85%)</span>
+        </button>
+        <button class="action-btn" data-action="dribble">
+          <i class="fas fa-running action-icon"></i>
+          <span class="action-name">DRIBBLE</span>
+          <span class="chance">(90%)</span>
+        </button>
+        <button class="action-btn" data-action="crossover">
+          <i class="fas fa-exchange-alt action-icon"></i>
+          <span class="action-name">CROSSOVER</span>
+          <span class="chance">(75%)</span>
+        </button>
+      </div>
+      
+      <!-- Defense Options (Hidden by default) -->
+      <div class="action-buttons" id="defense-options" style="display: none;">
+        <button class="action-btn" data-action="block">
+          <i class="fas fa-hand-paper action-icon"></i>
+          <span class="action-name">BLOCK</span>
+          <span class="chance">(65%)</span>
+        </button>
+        <button class="action-btn" data-action="steal">
+          <i class="fas fa-hand-rock action-icon"></i>
+          <span class="action-name">STEAL</span>
+          <span class="chance">(60%)</span>
+        </button>
+        <button class="action-btn" data-action="contest">
+          <i class="fas fa-shield-alt action-icon"></i>
+          <span class="action-name">CONTEST</span>
+          <span class="chance">(75%)</span>
+        </button>
+        <button class="action-btn" data-action="foul">
+          <i class="fas fa-exclamation-triangle action-icon"></i>
+          <span class="action-name">FOUL</span>
+          <span class="chance">(95%)</span>
+        </button>
+      </div>
+      
+      <div class="action-result" id="resultText">Choose an action</div>
+    </div>
+  </div>
+  
+  <script src="game.js"></script>
+</body>
+</html>
