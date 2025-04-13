@@ -111,7 +111,11 @@ $userId = $_SESSION["userid"];
             
             <div class="players-search">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search players...">
+                <input id="NameSearch" type="text" class="search-input" placeholder="Search players...">
+            </div>
+            <div class="players-search">
+                <i class="fas fa-search search-icon"></i>
+                <input id="TeamSearch" type="text" class="search-input" placeholder="Search teams...">
             </div>
             
             <div class="players-list" id="players-list">

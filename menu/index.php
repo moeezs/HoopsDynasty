@@ -144,25 +144,57 @@ try {
 // Get all opponents (all teams in the system)
 $allTeams = [];
 try {
-  $cmd = "SELECT id, team_name, creator FROM hoopsdynastyteams";
+  $cmd = "SELECT id, team_name, creator, center, power_forward, small_forward, point_guard, shooting_guard
+          FROM hoopsdynastyteams";
   $stmt = $dbh->prepare($cmd);
   $stmt->execute();
 
   while ($row = $stmt->fetch()) {
-    if ($row["creator"] !== $_SESSION["userid"]) {
-      $allTeams[$row["id"]] = [
+    if ($row["creator"] === $_SESSION["userid"] || $row["creator"] === "dmgg") {
+      $teamId = $row["id"];
+      $players = [];
+
+      // Go through each position and fetch player photo
+      foreach (
+        [
+          "C" => "center",
+          "PF" => "power_forward",
+          "SF" => "small_forward",
+          "PG" => "point_guard",
+          "SG" => "shooting_guard"
+        ] as $positionCode => $dbField
+      ) {
+        $playerName = $row[$dbField];
+
+        if (!empty($playerName)) {
+          $photoQuery = "SELECT TO_BASE64(photo) AS photo_base64 FROM hoopsdynastyplayers WHERE player_name = ? LIMIT 1";
+          $photoStmt = $dbh->prepare($photoQuery);
+          $photoStmt->execute([$playerName]);
+          $photoResult = $photoStmt->fetch();
+
+          $players[$positionCode] = [
+            "name" => $playerName,
+            "photo_base64" => $photoResult["photo_base64"] ?? null
+          ];
+        } else {
+          $players[$positionCode] = [
+            "name" => "Unknown",
+            "photo_base64" => null
+          ];
+        }
+      }
+
+      // Add team to list
+      $allTeams[$teamId] = [
         "name" => $row["team_name"],
-        "owner" => $row["creator"]
+        "owner" => $row["creator"],
+        "players" => $players
       ];
     }
   }
 } catch (Exception $e) {
-  // Fallback to demo opponents
-  $allTeams = [
-    "opponent1" => ["name" => "Chicago Bulls", "owner" => "system"],
-    "opponent2" => ["name" => "Miami Heat", "owner" => "system"],
-    "opponent3" => ["name" => "Phoenix Suns", "owner" => "system"]
-  ];
+  // fallback
+  $allTeams = [];
 }
 
 // Calculate team rating based on player positions
@@ -308,21 +340,16 @@ if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
                   <span class="team-card-owner">Owner: <?= htmlspecialchars($team["owner"]) ?></span>
                 </div>
                 <div class="team-card-players">
-                  <div class="team-card-player">
-                    <img src="../images/ball.png" alt="Player">
-                  </div>
-                  <div class="team-card-player">
-                    <img src="../images/ball.png" alt="Player">
-                  </div>
-                  <div class="team-card-player">
-                    <img src="../images/ball.png" alt="Player">
-                  </div>
-                  <div class="team-card-player">
-                    <img src="../images/ball.png" alt="Player">
-                  </div>
-                  <div class="team-card-player">
-                    <img src="../images/ball.png" alt="Player">
-                  </div>
+                  <?php foreach ($team["players"] as $pos => $player): ?>
+                    <div class="team-card-player">
+                      <img
+                        src="<?= $player["photo_base64"]
+                                ? 'data:image/jpeg;base64,' . $player["photo_base64"]
+                                : '../images/ball.png' ?>"
+                        alt="<?= htmlspecialchars($player["name"]) ?>"
+                        title="<?= htmlspecialchars($pos . ": " . $player["name"]) ?>">
+                    </div>
+                  <?php endforeach; ?>
                 </div>
               </div>
             <?php endforeach; ?>
@@ -373,13 +400,13 @@ if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
 
               switch (positionCount) {
                 case 0: {
-                  document.getElementById("PG").src = await getPhoto(playerName);
-                  document.getElementById("PGd").src = await getPhoto(playerName);
+                  document.getElementById("C").src = await getPhoto(playerName);
+                  document.getElementById("Cd").src = await getPhoto(playerName);
                   break;
                 }
                 case 1: {
-                  document.getElementById("SG").src = await getPhoto(playerName);
-                  document.getElementById("SGd").src = await getPhoto(playerName);
+                  document.getElementById("PF").src = await getPhoto(playerName);
+                  document.getElementById("PFd").src = await getPhoto(playerName);
                   break;
                 }
                 case 2: {
@@ -388,13 +415,13 @@ if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
                   break;
                 }
                 case 3: {
-                  document.getElementById("PF").src = await getPhoto(playerName);
-                  document.getElementById("PFd").src = await getPhoto(playerName);
+                  document.getElementById("PG").src = await getPhoto(playerName);
+                  document.getElementById("PGd").src = await getPhoto(playerName);
                   break;
                 }
                 case 4: {
-                  document.getElementById("C").src = await getPhoto(playerName);
-                  document.getElementById("Cd").src = await getPhoto(playerName);
+                  document.getElementById("SG").src = await getPhoto(playerName);
+                  document.getElementById("SGd").src = await getPhoto(playerName);
                   break;
                 }
               }

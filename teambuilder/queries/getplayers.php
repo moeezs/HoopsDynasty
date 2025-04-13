@@ -6,22 +6,22 @@ $player_team = filter_input(INPUT_POST, "team", FILTER_SANITIZE_SPECIAL_CHARS);
 $stmt;
 $success;
 
-if ($player_name !== null) {
-    if ($player_team !== null) {
-        $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers WHERE LOWER(player_name) LIKE LOWER(?) AND LOWER(player_team) LIKE LOWER(?) ORDER BY player_id LIMIT 50";
+if (!empty($player_name)) {
+    if (!empty($player_team)) {
+        $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers WHERE LOWER(player_name) LIKE LOWER(?) AND LOWER(player_team) LIKE LOWER(?) ORDER BY player_id LIMIT 8";
         $stmt = $dbh->prepare($command);
         $success = $stmt->execute(["%$player_name%", "%$player_team%"]);
     } else {
-        $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers WHERE LOWER(player_name) LIKE LOWER(?) ORDER BY player_id LIMIT 50";
+        $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers WHERE LOWER(player_name) LIKE LOWER(?) ORDER BY player_id LIMIT 8";
         $stmt = $dbh->prepare($command);
         $success = $stmt->execute(["%$player_name%"]);
     }
-} else if ($player_team !== null) {
-    $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers WHERE LOWER(player_team) LIKE LOWER(?) ORDER BY player_id LIMIT 50";
+} else if (!empty($player_team)) {
+    $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers WHERE LOWER(player_team) LIKE LOWER(?) ORDER BY player_id LIMIT 8";
     $stmt = $dbh-> prepare($command);
     $success = $stmt->execute(["%$player_team%"]);
 } else {
-    $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers ORDER BY player_id LIMIT 50";
+    $command = "SELECT player_id, player_name, player_team, three_point_percentage, two_point_percentage, free_throw_percentage, blocks_per_game, steals_per_game, personal_fouls_per_game, photo FROM hoopsdynastyplayers ORDER BY player_id LIMIT 8";
     $stmt = $dbh->prepare($command);
     $success = $stmt->execute();
 }
