@@ -606,17 +606,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Disable save button by default until team is complete
   saveTeamBtn.disabled = true;
 
-  function calculatePlayerStats(player) {
-    const stats = {
-      pointsPerGame: (player.fieldGoalsMade / player.gamesPlayed).toFixed(1),
-      assistsPerGame: (player.assists / player.gamesPlayed).toFixed(1),
-      reboundsPerGame: (player.rebounds / player.gamesPlayed).toFixed(1),
-      stealsPerGame: (player.steals / player.gamesPlayed).toFixed(1),
-      blocksPerGame: (player.blocks / player.gamesPlayed).toFixed(1),
-    };
-    return stats;
-  }
-
   function updateStatCaptions() {
     document.querySelectorAll('.stat-caption').forEach(caption => {
       const statType = caption.getAttribute('data-stat');

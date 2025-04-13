@@ -269,19 +269,19 @@ if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
             </div>
             <div class="team-card-players">
               <div class="team-card-player">
-                <img src="../images/ball.png" alt="Player">
+                <img id="PGd" src="../images/ball.png" alt="Player">
               </div>
               <div class="team-card-player">
-                <img src="../images/ball.png" alt="Player">
+                <img id="SGd" src="../images/ball.png" alt="Player">
               </div>
               <div class="team-card-player">
-                <img src="../images/ball.png" alt="Player">
+                <img id="SFd" src="../images/ball.png" alt="Player">
               </div>
               <div class="team-card-player">
-                <img src="../images/ball.png" alt="Player">
+                <img id="PFd" src="../images/ball.png" alt="Player">
               </div>
               <div class="team-card-player">
-                <img src="../images/ball.png" alt="Player">
+                <img id="Cd" src="../images/ball.png" alt="Player">
               </div>
             </div>
           </div>
@@ -309,19 +309,19 @@ if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
                 </div>
                 <div class="team-card-players">
                   <div class="team-card-player">
-                    <img id="PGd" src="../images/ball.png" alt="Player">
+                    <img src="../images/ball.png" alt="Player">
                   </div>
                   <div class="team-card-player">
-                    <img id="SGd" src="../images/ball.png" alt="Player">
+                    <img src="../images/ball.png" alt="Player">
                   </div>
                   <div class="team-card-player">
-                    <img id="SFd" src="../images/ball.png" alt="Player">
+                    <img src="../images/ball.png" alt="Player">
                   </div>
                   <div class="team-card-player">
-                    <img id="PFd" src="../images/ball.png" alt="Player">
+                    <img src="../images/ball.png" alt="Player">
                   </div>
                   <div class="team-card-player">
-                    <img id="Cd" src="../images/ball.png" alt="Player">
+                    <img src="../images/ball.png" alt="Player">
                   </div>
                 </div>
               </div>
@@ -374,22 +374,27 @@ if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
               switch (positionCount) {
                 case 0: {
                   document.getElementById("PG").src = await getPhoto(playerName);
+                  document.getElementById("PGd").src = await getPhoto(playerName);
                   break;
                 }
                 case 1: {
                   document.getElementById("SG").src = await getPhoto(playerName);
+                  document.getElementById("SGd").src = await getPhoto(playerName);
                   break;
                 }
                 case 2: {
                   document.getElementById("SF").src = await getPhoto(playerName);
+                  document.getElementById("SFd").src = await getPhoto(playerName);
                   break;
                 }
                 case 3: {
                   document.getElementById("PF").src = await getPhoto(playerName);
+                  document.getElementById("PFd").src = await getPhoto(playerName);
                   break;
                 }
                 case 4: {
                   document.getElementById("C").src = await getPhoto(playerName);
+                  document.getElementById("Cd").src = await getPhoto(playerName);
                   break;
                 }
               }
