@@ -50,7 +50,7 @@ $teamPlayers = [];
 
 try {
   // Get teams from hoopsdynastyteams table
-  $cmd = "SELECT id, team_name, creator, center, power_forward, small_forward, point_guard, shooting_guard FROM hoopsdynastyteams WHERE creator=?";
+  $cmd = "SELECT id, team_name, creator, access, center, power_forward, small_forward, point_guard, shooting_guard FROM hoopsdynastyteams WHERE creator=? || access = 1 ORDER BY access";
   $stmt = $dbh->prepare($cmd);
   $stmt->execute([$_SESSION["userid"]]);
 
@@ -74,83 +74,19 @@ try {
       }
     }
   }
-
-  // If no teams found, add demo teams for testing
-  if (empty($teams)) {
-    // Demo teams for new users
-    $demoTeams = [
-      ["name" => "Lakers", "rating" => 90, "id" => "demo1"],
-      ["name" => "Warriors", "rating" => 92, "id" => "demo2"],
-      ["name" => "Celtics", "rating" => 88, "id" => "demo3"]
-    ];
-
-    foreach ($demoTeams as $demo) {
-      $teams[$demo["id"]] = [
-        "name" => $demo["name"],
-        "rating" => $demo["rating"],
-        "demo" => true,
-        "players" => [
-          "C" => "Default Center",
-          "PF" => "Default Forward",
-          "SF" => "Default Small Forward",
-          "PG" => "Default Point Guard",
-          "SG" => "Default Shooting Guard"
-        ]
-      ];
-    }
-  }
 } catch (Exception $e) {
-  // Fallback to demo teams if database query fails
-  $teams = [
-    "demo1" => [
-      "name" => "Lakers",
-      "rating" => 90,
-      "demo" => true,
-      "players" => [
-        "C" => "Default Center",
-        "PF" => "Default Forward",
-        "SF" => "Default Small Forward",
-        "PG" => "Default Point Guard",
-        "SG" => "Default Shooting Guard"
-      ]
-    ],
-    "demo2" => [
-      "name" => "Warriors",
-      "rating" => 92,
-      "demo" => true,
-      "players" => [
-        "C" => "Default Center",
-        "PF" => "Default Forward",
-        "SF" => "Default Small Forward",
-        "PG" => "Default Point Guard",
-        "SG" => "Default Shooting Guard"
-      ]
-    ],
-    "demo3" => [
-      "name" => "Celtics",
-      "rating" => 88,
-      "demo" => true,
-      "players" => [
-        "C" => "Default Center",
-        "PF" => "Default Forward",
-        "SF" => "Default Small Forward",
-        "PG" => "Default Point Guard",
-        "SG" => "Default Shooting Guard"
-      ]
-    ]
-  ];
 }
 
 // Get all opponents (all teams in the system)
 $allTeams = [];
 try {
-  $cmd = "SELECT id, team_name, creator, center, power_forward, small_forward, point_guard, shooting_guard
-          FROM hoopsdynastyteams";
+  $cmd = "SELECT id, team_name, creator, access, center, power_forward, small_forward, point_guard, shooting_guard
+          FROM hoopsdynastyteams WHERE creator=? || access = 1 ORDER BY access";
   $stmt = $dbh->prepare($cmd);
-  $stmt->execute();
+  $stmt->execute([$_SESSION["userid"]]);
 
   while ($row = $stmt->fetch()) {
-    if ($row["creator"] === $_SESSION["userid"] || $row["creator"] === "dmgg") {
+    if ($row["creator"] === $_SESSION["userid"] || (int)$row["access"] === 1) {
       $teamId = $row["id"];
       $players = [];
 
@@ -456,11 +392,11 @@ if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
             if (data && data.photo_base64) {
               return "data:image/jpeg;base64," + data.photo_base64;
             } else {
-              return "../images/default_player.jpg"; // fallback image
+              return "../images/players/lebron.png"; // fallback image
             }
           } catch (err) {
             console.error("Photo fetch error for", name, err);
-            return "../images/default_player.jpg";
+            return "../images/players/lebron.png";
           }
         }
 
