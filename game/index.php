@@ -42,7 +42,7 @@ foreach ($directories as $dir) {
     <!-- Court Area with Players at opposite ends -->
     <div class="court-area">
       <div class="player-container home-team">
-        <img src="images/players/lebron.png" alt="Home Player" class="player-img" id="homePlayerImg">
+        <img src="../images/players/lebron.png" alt="Home Player" class="player-img" id="homePlayerImg">
         <img src="../images/ball.png" alt="Basketball" class="ball-img" id="homeBall">
       </div>
       
@@ -53,7 +53,7 @@ foreach ($directories as $dir) {
       </div>
       
       <div class="player-container away-team">
-        <img src="images/players/lebron.png" alt="Away Player" class="player-img" id="awayPlayerImg">
+        <img src="../images/players/lebron.png" alt="Away Player" class="player-img" id="awayPlayerImg">
         <img src="../images/ball.png" alt="Basketball" class="ball-img" id="awayBall">
       </div>
     </div>

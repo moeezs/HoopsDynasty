@@ -4,7 +4,7 @@ session_start();
 
 header("Content-Type: application/json");
 
-$team_name = filter_input(INPUT_GET, "team_name", FILTER_SANITIZE_SPECIAL_CHARS);
+$team_name = filter_input(INPUT_POST, "team_name", FILTER_SANITIZE_SPECIAL_CHARS);
 $creator = isset($_SESSION["userid"]) ? $_SESSION["userid"] : null;
 
 // Check if we have required parameters

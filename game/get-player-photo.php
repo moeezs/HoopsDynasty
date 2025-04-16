@@ -2,7 +2,7 @@
 // Include existing database connection
 require_once '../connect.php';
 
-// Get player name from query parameter
+// Get player name from GET
 $playerName = isset($_GET['name']) ? $_GET['name'] : '';
 
 if (empty($playerName)) {
@@ -19,13 +19,12 @@ try {
     // If we have a photo in the database
     if ($result && !empty($result['photo'])) {
         // Set the content type to image
-        header('Content-Type: image/jpeg'); // Adjust if your images are not JPEGs
-        // Output the image data
+        header('Content-Type: image/jpeg');
         echo $result['photo'];
     } else {
         // Serve default image file
         $defaultImage = 'images/players/lebron.png';
-        
+
         if (file_exists($defaultImage)) {
             $mime = mime_content_type($defaultImage);
             header("Content-Type: $mime");

@@ -73,10 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
         foulsPerGame: parseFloat(player.personal_fouls_per_game) || 0
       }));
 
-      console.log("Loaded players:", players);
       renderPlayersList();
     } catch (error) {
-      console.error('Error loading players:', error);
       playersList.innerHTML = '<div class="error">Failed to load players</div>';
     }
   }
@@ -159,9 +157,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch(`queries/getteamplayers.php?team_name=${encodeURIComponent(teamName)}`);
+      const params = "team_name=" + encodeURIComponent(teamName);
+
+      const response = await fetch("queries/getteamplayers.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: params,
+        cache: "no-store",
+        credentials: "same-origin"
+      });
+
       if (!response.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Team is Missing');
       }
 
       const data = await response.json();
@@ -520,47 +529,25 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch("../teambuilder/queries/getplayers.php", config)
       .then(response => response.json())
       .then(data => {
-        data.forEach(player => {
-          queriedPlayers.push(player)
-        });
+        players = data.map(player => ({
+          id: player.player_id,
+          name: player.player_name,
+          team: player.player_team,
+          image: player.photo || '../images/players/lebron.png',
+          threePointPct: parseFloat(player.three_point_percentage) || 0,
+          twoPointPct: parseFloat(player.two_point_percentage) || 0,
+          freeThrowPct: parseFloat(player.free_throw_percentage) || 0,
+          blocksPerGame: parseFloat(player.blocks_per_game) || 0,
+          stealsPerGame: parseFloat(player.steals_per_game) || 0,
+          foulsPerGame: parseFloat(player.personal_fouls_per_game) || 0
+        }));
 
-        if (queriedPlayers[0] === "NONE" || queriedPlayers.length === 0) {
-          playersList.innerHTML = '';
+        if (players.length === 0 || players[0] === "NONE") {
           playersList.innerHTML = '<div class="no-results">No matching players found</div>';
           return;
         }
-        else {
-          playersList.innerHTML = '';
 
-          queriedPlayers.forEach(player => {
-            const playerItem = document.createElement('div');
-            playerItem.className = 'player-item';
-            playerItem.setAttribute('data-id', player["player_id"]);
-
-            playerItem.innerHTML = `
-              <div class="player-avatar">
-                <img src="${player["photo"]}" alt="${player["player_name"]}" onerror="this.src='../images/players/lebron.png'">
-              </div>
-              <div class="player-details">
-                <div class="player-name-list">${player["player_name"]}</div>
-                <div class="player-position">${player["player_team"] || 'Free Agent'}</div>
-              </div>
-              `;
-
-
-            playerItem.addEventListener('click', () => {
-              // Remove selected class from all player items
-              playersList.querySelectorAll('.player-item').forEach(p => p.classList.remove('selected'));
-
-              // Add selected class to clicked item
-              playerItem.classList.add('selected');
-
-              showPlayerPreview(player["id"]);
-            });
-
-            playersList.appendChild(playerItem);
-          });
-        }
+        renderPlayersList();
       })
   }
 
@@ -573,9 +560,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Team select dropdown change
-  teamSelect.addEventListener('change', () => {
+  teamSelect.addEventListener('change', (e) => {
+    e.preventDefault();
     loadTeam(teamSelect.value);
   });
+
 
   // Delete team button
   deleteTeamBtn.addEventListener('click', () => {

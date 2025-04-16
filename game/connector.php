@@ -24,6 +24,10 @@ function getPlayerDetails($playerName) {
         
         $player = $stmt->fetch(PDO::FETCH_ASSOC);
         
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['name'])) {
+            $playerName = $_POST['name'];
+        }
+        
         if ($player) {
             // Return player with statistics
             return [
@@ -111,7 +115,6 @@ function generatePositionBasedStats($position) {
                 'steals_per_game' => (rand(5, 15) / 10),
                 'fouls_per_game' => (rand(25, 40) / 10)
             ];
-            
         case 'PF':
             return [
                 'three_point_percentage' => rand(30, 40),
@@ -121,7 +124,6 @@ function generatePositionBasedStats($position) {
                 'steals_per_game' => (rand(8, 18) / 10),
                 'fouls_per_game' => (rand(22, 35) / 10)
             ];
-            
         case 'SF':
             return [
                 'three_point_percentage' => rand(35, 45),
@@ -131,7 +133,6 @@ function generatePositionBasedStats($position) {
                 'steals_per_game' => (rand(12, 22) / 10),
                 'fouls_per_game' => (rand(18, 30) / 10)
             ];
-            
         case 'SG':
             return [
                 'three_point_percentage' => rand(38, 48),
@@ -141,7 +142,6 @@ function generatePositionBasedStats($position) {
                 'steals_per_game' => (rand(15, 25) / 10),
                 'fouls_per_game' => (rand(15, 28) / 10)
             ];
-            
         case 'PG':
             return [
                 'three_point_percentage' => rand(36, 46),
@@ -151,7 +151,6 @@ function generatePositionBasedStats($position) {
                 'steals_per_game' => (rand(18, 30) / 10),
                 'fouls_per_game' => (rand(15, 25) / 10)
             ];
-            
         default:
             return [
                 'three_point_percentage' => rand(30, 40),

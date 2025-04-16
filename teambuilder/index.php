@@ -20,6 +20,7 @@ $userId = $_SESSION["userid"];
     <title>Basketball Team Builder</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="./js/teambuilder.js" defer></script>
 </head>
 <body>
     <div class="builder-container">
@@ -153,7 +154,5 @@ $userId = $_SESSION["userid"];
 
     <!-- Status Message -->
     <div id="statusMessage" class="status-message"></div>
-    
-    <script src="js/teambuilder.js"></script>
 </body>
 </html>

@@ -24,12 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	const awayTeamName = document.getElementById('awayTeamName');
 	const gameLogContainer = document.getElementById('logEntries');
 	const playAgainBtn = document.getElementById('playAgainBtn');
-	
+
 	// Add game log toggle functionality
 	const gameLog = document.getElementById('gameLog');
 	const logToggle = document.getElementById('logToggle');
 	const logToggleIcon = document.getElementById('logToggleIcon');
-	
+
 	if (logToggle) {
 		logToggle.addEventListener('click', () => {
 			gameLog.classList.toggle('collapsed');
@@ -42,16 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 		});
 	}
-	
+
 	// Player images elements
 	const homePlayerImg = document.getElementById('homePlayerImg');
 	const awayPlayerImg = document.getElementById('awayPlayerImg');
 	const homeBall = document.getElementById('homeBall');
 	const awayBall = document.getElementById('awayBall');
-	
+
 	// Ensure ball images have the correct path
-	if (homeBall) homeBall.src = '../images/ball.png';
-	if (awayBall) awayBall.src = '../images/ball.png';
+	if (homeBall) homeBall.src = '../../images/ball.png';
+	if (awayBall) awayBall.src = '../../images/ball.png';
 
 	initGame();
 
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				handlePlayerAction(action);
 			});
 		});
-		
+
 		playAgainBtn.addEventListener('click', () => {
 			location.reload();
 		});
@@ -186,10 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else {
 			// Defensive actions
 			const opponentOffenseChance = getOpponentOffenseChance();
-			
+
 			const blocksPerGame = Number(gameData.currentPlayer.blocks_per_game);
 			const stealsPerGame = Number(gameData.currentPlayer.steals_per_game);
-			
+
 			const blockChance = 18 + Math.min(80, blocksPerGame * 25);
 			const stealChance = 20 + Math.min(70, stealsPerGame * 15);
 			const tackleChance = 15 + Math.min(70, stealsPerGame * 0.8 * 15);
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	function selectRandomPlayers() {
 		gameData.currentPlayer = getRandomPlayer(gameData.teamPlayers);
 		gameData.opponentPlayer = getRandomPlayer(gameData.opponentPlayers);
-		
+
 		// Update player images when players change
 		updatePlayerImages();
 	}
@@ -505,7 +505,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		resultText.textContent = 'Choose an action';
-		
+
 		playAgainBtn.style.display = 'none';
 
 		updatePlayerImages();
@@ -516,21 +516,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	 */
 	function updatePlayerImages() {
 		if (homePlayerImg && gameData.currentPlayer) {
-			homePlayerImg.src = gameData.currentPlayer.photo || "images/players/lebron.png";
+			homePlayerImg.src = gameData.currentPlayer.photo || "/~ruefferg/Team45/HoopsDynasty/images/players/lebron.png";
 			homePlayerImg.alt = gameData.currentPlayer.player_name;
 			// Add error handling for player images
-			homePlayerImg.onerror = function() {
-				this.src = "images/players/lebron.png";
+			homePlayerImg.onerror = function () {
+				this.src = "/~ruefferg/Team45/HoopsDynasty/images/players/lebron.png";
 				console.log("Error loading player image, using default");
 			};
 		}
-		
+
 		if (awayPlayerImg && gameData.opponentPlayer) {
-			awayPlayerImg.src = gameData.opponentPlayer.photo || "images/players/lebron.png";
+			awayPlayerImg.src = gameData.opponentPlayer.photo || "/~ruefferg/Team45/HoopsDynasty/images/players/lebron.png";
 			awayPlayerImg.alt = gameData.opponentPlayer.player_name;
 			// Add error handling for player images
-			awayPlayerImg.onerror = function() {
-				this.src = "images/players/lebron.png";
+			awayPlayerImg.onerror = function () {
+				this.src = "/~ruefferg/Team45/HoopsDynasty/images/players/lebron.png";
 				console.log("Error loading player image, using default");
 			};
 		}

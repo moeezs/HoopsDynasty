@@ -6,16 +6,16 @@
  * @param string $source - Source of parameters ('GET' or 'POST')
  * @return array - Array with 'valid' boolean and 'missing' array of missing params
  */
-function validateParams($params, $source = 'GET') {
+function validateParams($params, $source = 'POST') {
     $missing = [];
     $source = $source === 'POST' ? $_POST : $_GET;
-    
+
     foreach ($params as $param) {
         if (!isset($source[$param]) || empty($source[$param])) {
             $missing[] = $param;
         }
     }
-    
+
     return [
         'valid' => empty($missing),
         'missing' => $missing
@@ -44,7 +44,7 @@ function handleDbError($e) {
         'message' => 'Database error occurred',
         'dev_message' => $e->getMessage()
     ];
-    
+
     sendJsonResponse($errorResponse, 500);
 }
 
@@ -56,30 +56,30 @@ function handleDbError($e) {
 function calculateActionProbabilities($player) {
     $position = strtolower($player['player_position']);
     $probabilities = [];
-    
+
     // Offensive probabilities
     $probabilities['three_pointer'] = $player['three_point_percentage'];
     $probabilities['layup'] = $player['two_point_percentage'];
     $probabilities['pass'] = min(95, $player['two_point_percentage'] + 10);
-    
+
     // Adjusts dunk probability based on position
     if ($position === 'center' || $position === 'power forward') {
         $probabilities['dunk'] = $player['two_point_percentage'] - 5;
     } else {
         $probabilities['dunk'] = $player['two_point_percentage'] - 15;
     }
-    
+
     // Defensive probabilities
     $probabilities['block'] = $player['blocks_per_game'] * 10;
     $probabilities['steal'] = $player['steals_per_game'] * 10;
     $probabilities['tackle'] = $player['steals_per_game'] * 8;
     $probabilities['pressure'] = 50 + ($player['steals_per_game'] * 5);
-    
+
     // Keeps the values between 5 and 95
     foreach ($probabilities as $key => $value) {
         $probabilities[$key] = max(5, min(95, $value));
     }
-    
+
     return $probabilities;
 }
 
@@ -92,9 +92,9 @@ if (!isset($_SESSION["userid"])) {
     exit;
 }
 
-// Get team IDs from URL parameters
-$userTeamId = filter_input(INPUT_GET, "userTeamId", FILTER_SANITIZE_SPECIAL_CHARS);
-$opponentTeamId = filter_input(INPUT_GET, "opponentTeamId", FILTER_SANITIZE_SPECIAL_CHARS);
+// Get team IDs from POST parameters
+$userTeamId = filter_input(INPUT_POST, "userTeamId", FILTER_SANITIZE_SPECIAL_CHARS);
+$opponentTeamId = filter_input(INPUT_POST, "opponentTeamId", FILTER_SANITIZE_SPECIAL_CHARS);
 
 if (!$userTeamId || !$opponentTeamId) {
     echo json_encode([
@@ -107,10 +107,10 @@ if (!$userTeamId || !$opponentTeamId) {
 try {
     // Fetch user team data
     $userTeam = getTeamData($dbh, $userTeamId);
-    
+
     // Fetch opponent team data
     $opponentTeam = getTeamData($dbh, $opponentTeamId);
-    
+
     // Return team data as JSON
     echo json_encode([
         "status" => "success",
@@ -119,7 +119,7 @@ try {
         "opponent" => $opponentTeam["players"],
         "opponentName" => $opponentTeam["name"]
     ]);
-    
+
 } catch (Exception $e) {
     echo json_encode([
         "status" => "error",
@@ -139,24 +139,24 @@ function getTeamData($dbh, $teamId) {
     $teamStmt = $dbh->prepare($teamQuery);
     $teamStmt->execute([$teamId]);
     $team = $teamStmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$team) {
         throw new Exception("Team not found");
     }
-    
+
     // Fetch team players from positions
     $playersQuery = "SELECT * FROM teamplayers WHERE team_id = ?";
     $playersStmt = $dbh->prepare($playersQuery);
     $playersStmt->execute([$teamId]);
     $teamPlayers = [];
-    
+
     while ($player = $playersStmt->fetch(PDO::FETCH_ASSOC)) {
         // Get player details from players table
         $playerDetailQuery = "SELECT * FROM hoopsdynastyplayers WHERE player_name = ?";
         $playerDetailStmt = $dbh->prepare($playerDetailQuery);
         $playerDetailStmt->execute([$player["player_name"]]);
         $playerDetail = $playerDetailStmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($playerDetail) {
             $teamPlayers[] = $playerDetail;
         } else {
@@ -175,16 +175,16 @@ function getTeamData($dbh, $teamId) {
             ];
         }
     }
-    
+
     // If no players found or fewer than 5, add generic players
     if (count($teamPlayers) < 5) {
         $positions = ["PG", "SG", "SF", "PF", "C"];
         $existingPositions = [];
-        
+
         foreach ($teamPlayers as $player) {
             $existingPositions[] = $player["player_position"];
         }
-        
+
         foreach ($positions as $position) {
             if (!in_array(determinePosition($position), $existingPositions)) {
                 $teamPlayers[] = [
@@ -202,7 +202,7 @@ function getTeamData($dbh, $teamId) {
             }
         }
     }
-    
+
     return [
         "name" => $team["teamname"],
         "rating" => $team["rating"],
@@ -231,4 +231,3 @@ function determinePosition($position) {
             return strtolower($position);
     }
 }
-?>

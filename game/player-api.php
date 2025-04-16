@@ -3,6 +3,9 @@
 include "../connect.php";
 include "connector.php";
 
+session_start();
+header('Content-Type: application/json');
+
 /**
  * Get player details by ID
  * @param int $playerId - Player ID to retrieve
@@ -30,7 +33,6 @@ function getPlayerById($playerId, $source = 'getTeam') {
         $player = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($player) {
-            // Calculate action probabilities
             $player['probabilities'] = calculateActionProbabilities($player);
         }
         
@@ -49,7 +51,6 @@ function getPlayerByName($playerName) {
     global $dbh;
     
     try {
-        // First try to find in hoopsdynastyplayers table
         $sql = "SELECT player_ID as id, player_name as name, player_position as position, player_team as team, 
                 three_point_percentage, two_point_percentage, free_throw_percentage, 
                 blocks_per_game, steals_per_game, personal_fouls_per_game 
@@ -63,15 +64,13 @@ function getPlayerByName($playerName) {
         $player = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($player) {
-            // Convert fields to appropriate types
             $player['three_point_percentage'] = floatval($player['three_point_percentage']);
             $player['two_point_percentage'] = floatval($player['two_point_percentage']);
             $player['free_throw_percentage'] = floatval($player['free_throw_percentage']);
             $player['blocks_per_game'] = floatval($player['blocks_per_game']);
             $player['steals_per_game'] = floatval($player['steals_per_game']);
             $player['personal_fouls_per_game'] = floatval($player['personal_fouls_per_game']);
-            
-            // For compatibility with different field names
+
             $player['player_name'] = $player['name'];
             $player['player_ID'] = $player['id'];
             $player['player_position'] = $player['position'];
@@ -79,8 +78,7 @@ function getPlayerByName($playerName) {
             
             return $player;
         }
-        
-        // If not found, create default player data
+
         return [
             'id' => 'default_' . md5($playerName),
             'name' => $playerName,
@@ -108,85 +106,44 @@ function getPlayerByName($playerName) {
  */
 function determinePositionFromName($name) {
     $name = strtolower($name);
-    
-    if (strpos($name, 'center') !== false || strpos($name, ' c ') !== false || $name === 'c') {
-        return 'C';
-    } elseif (strpos($name, 'power forward') !== false || strpos($name, ' pf ') !== false || $name === 'pf') {
-        return 'PF';
-    } elseif (strpos($name, 'small forward') !== false || strpos($name, ' sf ') !== false || $name === 'sf') {
-        return 'SF';
-    } elseif (strpos($name, 'point guard') !== false || strpos($name, ' pg ') !== false || $name === 'pg') {
-        return 'PG';
-    } elseif (strpos($name, 'shooting guard') !== false || strpos($name, ' sg ') !== false || $name === 'sg') {
-        return 'SG';
-    }
-    
-    // Default to a random position
-    $positions = ['PG', 'SG', 'SF', 'PF', 'C'];
-    return $positions[array_rand($positions)];
+    if (strpos($name, 'center') !== false || strpos($name, ' c ') !== false || $name === 'c') return 'C';
+    if (strpos($name, 'power forward') !== false || strpos($name, ' pf ') !== false || $name === 'pf') return 'PF';
+    if (strpos($name, 'small forward') !== false || strpos($name, ' sf ') !== false || $name === 'sf') return 'SF';
+    if (strpos($name, 'point guard') !== false || strpos($name, ' pg ') !== false || $name === 'pg') return 'PG';
+    if (strpos($name, 'shooting guard') !== false || strpos($name, ' sg ') !== false || $name === 'sg') return 'SG';
+    return ['PG', 'SG', 'SF', 'PF', 'C'][array_rand(['PG', 'SG', 'SF', 'PF', 'C'])];
 }
 
-/**
- * Handle GET request for single player
- */
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Validate required parameters
-    if (!isset($_GET['player_name'])) {
-        sendJsonResponse([
-            'status' => 'error',
-            'message' => 'Missing player_name parameter'
-        ], 400);
-        exit;
-    }
-    
-    $playerName = $_GET['player_name'];
-    $player = getPlayerDetails($playerName);
-    
-    if (!$player) {
-        sendJsonResponse([
-            'status' => 'error',
-            'message' => 'Player not found'
-        ], 404);
-        exit;
-    }
-    
+// Only handle POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendJsonResponse([
-        'status' => 'success',
-        'player' => $player
-    ]);
+        'status' => 'error',
+        'message' => 'Only POST requests allowed.'
+    ], 405);
 }
 
-/**
- * Handle POST request for multiple players
- */
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get request body and parse JSON
-    $requestBody = file_get_contents('php://input');
-    $data = json_decode($requestBody, true);
-    
-    if (!$data || !isset($data['playerNames']) || !is_array($data['playerNames'])) {
-        sendJsonResponse([
-            'status' => 'error',
-            'message' => 'Invalid request. Expected JSON with playerNames array.'
-        ], 400);
-        exit;
-    }
-    
-    $playerNames = $data['playerNames'];
-    $players = [];
-    
-    foreach ($playerNames as $playerName) {
-        $player = getPlayerDetails($playerName);
-        if ($player) {
-            $players[] = $player;
-        }
-    }
-    
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
+if (!$data || !isset($data['playerNames']) || !is_array($data['playerNames'])) {
     sendJsonResponse([
-        'status' => 'success',
-        'players' => $players
-    ]);
+        'status' => 'error',
+        'message' => 'Invalid request. Expected JSON with playerNames array.'
+    ], 400);
 }
+
+$players = [];
+foreach ($data['playerNames'] as $playerName) {
+    $player = getPlayerByName($playerName);
+    if ($player) {
+        $players[] = $player;
+    }
+}
+
+sendJsonResponse([
+    'status' => 'success',
+    'players' => $players
+]);
 
 /**
  * Send JSON response
@@ -194,7 +151,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
  * @param int $status - HTTP status code
  */
 function sendJsonResponse($data, $status = 200) {
-    header('Content-Type: application/json');
     http_response_code($status);
     echo json_encode($data);
     exit;
@@ -219,13 +175,11 @@ function handleDbError($e) {
  */
 function validateParams($required) {
     $missing = [];
-    
     foreach ($required as $param) {
-        if (!isset($_GET[$param]) && !isset($_POST[$param])) {
+        if (!isset($_POST[$param])) {
             $missing[] = $param;
         }
     }
-    
     return [
         'valid' => empty($missing),
         'missing' => $missing
