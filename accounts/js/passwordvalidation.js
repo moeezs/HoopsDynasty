@@ -1,10 +1,21 @@
-// Password validation script
+/*
+    Author: Grady Rueffer
+    Student Number: 400579449
+    Date: 15-03-2025
+    Description: This file contains functionality to check and prevent form submission
+    on missing or invalid parameters.
+    Used in: signin.php
+*/
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements (Form and passwords)
     const accountForm = document.getElementById('accountform');
     const password = document.getElementById('password');
     const password2 = document.getElementById('password2');
     
-    // Validate passwords match on form submission
+    /*
+        Validate passwords match on form submission
+    */
     accountForm.addEventListener('submit', function(event) {
         if (password.value !== password2.value) {
             event.preventDefault();
@@ -41,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     errorMessage.textContent = '';
                 }
             } else {
+                // Hide invalid password border styling
                 password.style.borderColor = '';
                 password2.style.borderColor = '';
             }

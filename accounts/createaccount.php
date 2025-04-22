@@ -1,6 +1,16 @@
+<!--
+    Author: Grady Rueffer
+    Student Number: 400579449
+    Date: 15-03-2025
+    Description: This file contains functionality to receive post parameters
+    from a form sent by itself to create an acoount on the database.
+    Links to: signin.php (On Sign In or successful account creation), createaccont.php (Links to itself)
+--> 
 <?php
+// Include the database connection
 include "../connect.php";
 
+// Set error variables
 $error = "";
 $registrationSuccess = false;
 
@@ -13,20 +23,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastname = filter_input(INPUT_POST, "lastname", FILTER_SANITIZE_SPECIAL_CHARS);
     $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_EMAIL);
 
-    // Basic validation
+    // Check that all fieds have been received
     if (!$username || !$password || !$password2 || !$firstname || !$lastname || !$email) {
         $error = "All fields are required";
-    } elseif ($password !== $password2) {
+    } 
+
+    // Validate matching passwords
+    elseif ($password !== $password2) {
         $error = "Passwords do not match";
     } else {
         // Check if username already exists
         $checkUserStmt = $dbh->prepare("SELECT username FROM hoopsdynastyusers WHERE username = ?");
         $checkUserStmt->execute([$username]);
         
+        // If user is found, report back a player found error
         if ($checkUserStmt->rowCount() > 0) {
             $error = "Username already exists";
         } else {
+            // Attempt to insert a new user
             try {
+                // Create insert statement (All non-admins have an access level of 0)
                 $cmd = "INSERT INTO `hoopsdynastyusers`(`username`, `password`, `firstname`, `lastname`, `accesslevel`, `email`) VALUES (?,?,?,?,0,?)";
                 $stmt = $dbh->prepare($cmd);
                 $stmt->execute([$username, password_hash($password, PASSWORD_BCRYPT), $firstname, $lastname, $email]);
@@ -37,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location: ./signin.php?registration=success");
                 exit;
             } catch (PDOException $e) {
+                // Report that user insertion has failed
                 $error = "Registration failed: " . $e->getMessage();
             }
         }

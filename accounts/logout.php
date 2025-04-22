@@ -1,3 +1,11 @@
+<!--
+    Author: Grady Rueffer
+    Student Number: 400579449
+    Date: 15-03-2025
+    Description: This file contains baseline reusable code accross the web app
+    to destroy the session and redirect to the welcome page
+    Links to: HoopsDynasty/index.php (Redirects user to welcome page)
+--> 
 <?php
 // Start the session to access session data
 session_start();
@@ -13,7 +21,7 @@ if (isset($_COOKIE[session_name()])) {
 // Destroy the session
 session_destroy();
 
-// Redirect to login page
+// Redirect to welcome page
 header("Location: ../index.php");
 exit;
 ?>

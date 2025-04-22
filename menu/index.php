@@ -5,36 +5,50 @@
  */
 include "../connect.php";
 
+// Start the session
 session_start();
 
+// Check if a valid session is running, attempt to set the session if it's not running
 if (!isset($_SESSION["userid"])) {
+  // Filter userid and receive password
   $userid = filter_input(INPUT_POST, "userid", FILTER_SANITIZE_SPECIAL_CHARS);
   $password = filter_input(INPUT_POST, "password");
 
   if ($userid !== null and $password !== null) {
+    // Fetch user data from the database
     $cmd = "SELECT password, firstname, lastname, accesslevel FROM hoopsdynastyusers WHERE username=?";
     $stmt = $dbh->prepare($cmd);
     $stmt->execute([$userid]);
 
     if ($row = $stmt->fetch()) {
+      // Verify that the given password matches the stored hashed and salted password
       if (password_verify($password, $row["password"])) {
+        // Store user data in the session data (excluding password)
         $_SESSION["userid"] = $userid;
         $_SESSION["firstname"] = $row["firstname"];
         $_SESSION["lastname"] = $row["lastname"];
         $_SESSION["accesslevel"] = $row["accesslevel"];
       } else {
+        // Invalid password received, redirect to signin.php
         session_unset();
         session_destroy();
         header("Location: ../accounts/signin.php?error=invalid");
         exit;
       }
     } else {
-      // bad login attempt. kick them out.
+      // The login attempt failed, redirect to signin.php
       session_unset();
       session_destroy();
       header("Location: ../accounts/signin.php?error=invalid");
       exit;
     }
+  }
+  else {
+    // The login attempt was not properly recieved, redirect to signin.php
+    session_unset();
+    session_destroy();
+    header("Location: ../accounts/signin.php?error=invalid");
+    exit;
   }
 }
 
