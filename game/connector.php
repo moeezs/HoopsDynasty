@@ -1,3 +1,12 @@
+<!--
+    Author: Daryl John
+    Student Number: 400583895
+    Date: 20-03-2025
+    Description: This file contains the PHP functions needed to
+    send the requests to the database and create the player
+    action probabilities based off of their stats and position
+--> 
+
 <?php
 include "../connect.php";
 

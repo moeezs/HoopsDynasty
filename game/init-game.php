@@ -1,15 +1,19 @@
-<?php
-// Include existing database connection
-require_once '../connect.php';
+<!--
+    Author: Daryl John
+    Student Number: 400583895
+    Date: 20-03-2025
+    Description: This file contains the PHP code needed to
+    turn all of the needed player data into an object at
+    the start of the game
+--> 
 
-// Set content type to JSON
+<?php
+require_once '../connect.php';
 header('Content-Type: application/json');
 
-// Get team IDs from URL parameters
 $userTeamId = isset($_GET['userTeamId']) ? intval($_GET['userTeamId']) : 0;
 $opponentTeamId = isset($_GET['opponentTeamId']) ? intval($_GET['opponentTeamId']) : 0;
 
-// Validate team IDs
 if ($userTeamId <= 0 || $opponentTeamId <= 0) {
     echo json_encode([
         'status' => 'error',

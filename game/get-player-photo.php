@@ -1,8 +1,13 @@
-<?php
-// Include existing database connection
-require_once '../connect.php';
+<!--
+    Author: Daryl John
+    Student Number: 400583895
+    Date: 20-03-2025
+    Description: This file contains the PHP code needed to
+    get the player images from the database and display them
+--> 
 
-// Get player name from GET
+<?php
+require_once '../connect.php';
 $playerName = isset($_GET['name']) ? $_GET['name'] : '';
 
 if (empty($playerName)) {
@@ -16,7 +21,6 @@ try {
     $stmt->execute(['player_name' => $playerName]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // If we have a photo in the database
     if ($result && !empty($result['photo'])) {
         // Set the content type to image
         header('Content-Type: image/jpeg');

@@ -1,46 +1,17 @@
-<?php
+<!--
+    Author: Daryl John
+    Student Number: 400583895
+    Date: 20-03-2025
+    Description: This file contains the PHP functions needed to
+    get the specific player data from the database
+--> 
 
+<?php
 include "../connect.php";
 include "connector.php";
 
 session_start();
 header('Content-Type: application/json');
-
-/**
- * Get player details by ID
- * @param int $playerId - Player ID to retrieve
- * @param string $source - Database table to query ('getTeam' or 'getOpponent')
- * @return array - Player data
- */
-function getPlayerById($playerId, $source = 'getTeam') {
-    global $dbh;
-    
-    try {
-        $validSources = ['getTeam', 'getOpponent'];
-        if (!in_array($source, $validSources)) {
-            $source = 'getTeam';
-        }
-        
-        $sql = "SELECT player_ID, player_name, player_position, player_team, 
-                three_point_percentage, two_point_percentage, free_throw_percentage, 
-                blocks_per_game, steals_per_game, personal_fouls_per_game 
-                FROM $source WHERE player_ID = :player_id";
-        
-        $stmt = $dbh->prepare($sql);
-        $stmt->bindParam(':player_id', $playerId, PDO::PARAM_INT);
-        $stmt->execute();
-        
-        $player = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($player) {
-            $player['probabilities'] = calculateActionProbabilities($player);
-        }
-        
-        return $player;
-    } catch (PDOException $e) {
-        handleDbError($e);
-    }
-}
 
 /**
  * Get player details by name
@@ -114,7 +85,6 @@ function determinePositionFromName($name) {
     return ['PG', 'SG', 'SF', 'PF', 'C'][array_rand(['PG', 'SG', 'SF', 'PF', 'C'])];
 }
 
-// Only handle POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendJsonResponse([
         'status' => 'error',

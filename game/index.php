@@ -1,5 +1,12 @@
+<!--
+    Author: Daryl John
+    Student Number: 400583895
+    Date: 20-03-2025
+    Description: This file contains the HTML and PHP code
+    needed to display the elements of the main game page
+--> 
+
 <?php
-// Validate team parameters
 $userTeamId = isset($_GET['userTeamId']) ? intval($_GET['userTeamId']) : 0;
 $opponentTeamId = isset($_GET['opponentTeamId']) ? intval($_GET['opponentTeamId']) : 0;
 
@@ -21,13 +28,13 @@ foreach ($directories as $dir) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Basketball Game Simulation</title>
+  <title>Hoops Dynasty Basketball Game Simulation</title>
   <link rel="stylesheet" href="css/game.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
   <div class="main-container">
-    <!-- Compact Header with Scoreboard -->
+    <!-- Header with Scoreboard -->
     <div class="game-header">
       <div class="scoreboard">
         <span class="team-name" id="homeTeamName">Home</span>
@@ -65,7 +72,7 @@ foreach ($directories as $dir) {
       </button>
       <div class="log-title">GAME LOG</div>
       <div class="log-container" id="logEntries">
-        <!-- Log entries will be populated by JS -->
+        <!-- Log entries will be created by JS -->
       </div>
     </div>
     

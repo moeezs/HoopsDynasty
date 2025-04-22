@@ -1,3 +1,11 @@
+/*
+    Author: Daryl John
+    Student Number: 400583895
+    Date: 20-03-2025
+    Description: This file contains all of the JS code needed to
+    handle the game logic and UI interactions for the game
+*/ 
+
 document.addEventListener('DOMContentLoaded', () => {
 	let gameData = {
 		teamPlayers: [],
@@ -50,8 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	const awayBall = document.getElementById('awayBall');
 
 	// Ensure ball images have the correct path
-	if (homeBall) homeBall.src = '../../images/ball.png';
-	if (awayBall) awayBall.src = '../../images/ball.png';
+	if (homeBall) homeBall.src = '/~ruefferg/Team45/HoopsDynasty/images/ball.png';
+	if (awayBall) awayBall.src = '/~ruefferg/Team45/HoopsDynasty/images/ball.png';
+
+	// Set initial ball visibility
+	if (homeBall) homeBall.style.display = 'block';
+	if (awayBall) awayBall.style.display = 'none';
 
 	initGame();
 
@@ -457,59 +469,67 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	/**
-	 * Update UI based on game state
-	 */
-	function updateUI() {
-		if (gameData.eventCount >= gameData.maxEvents) {
-			endGame();
-			return;
-		}
+ * Update UI based on game state
+ */
+function updateUI() {
+    if (gameData.eventCount >= gameData.maxEvents) {
+        endGame();
+        return;
+    }
 
-		if (gameData.offense) {
-			stateLabel.textContent = 'Offense';
-			offenseOptions.style.display = 'flex';
-			defenseOptions.style.display = 'none';
-			ballPossession.textContent = `${gameData.currentPlayer.player_name} (${gameData.teamName})`;
+    if (gameData.offense) {
+        stateLabel.textContent = 'Offense';
+        offenseOptions.style.display = 'flex';
+        defenseOptions.style.display = 'none';
+        ballPossession.textContent = `${gameData.currentPlayer.player_name} (${gameData.teamName})`;
+        
+        // Show home ball, hide away ball during offense
+        if (homeBall) homeBall.style.display = 'block';
+        if (awayBall) awayBall.style.display = 'none';
 
-			// Update chance percentages for offense buttons
-			document.querySelector('button[data-action="three-pointer"] .chance').textContent =
-				`(${gameData.currentPlayer.three_point_percentage.toFixed(1)}%)`;
-			document.querySelector('button[data-action="layup"] .chance').textContent =
-				`(${gameData.currentPlayer.two_point_percentage.toFixed(1)}%)`;
-			document.querySelector('button[data-action="pass"] .chance').textContent =
-				`(${(gameData.currentPlayer.two_point_percentage + 10).toFixed(1)}%)`;
-			document.querySelector('button[data-action="dunk"] .chance').textContent =
-				`(${(gameData.currentPlayer.two_point_percentage - 10).toFixed(1)}%)`;
-		} else {
-			stateLabel.textContent = 'Defense';
-			offenseOptions.style.display = 'none';
-			defenseOptions.style.display = 'flex';
-			ballPossession.textContent = `${gameData.opponentPlayer.player_name} (${gameData.opponentName})`;
+        // Update chance percentages for offense buttons
+        document.querySelector('button[data-action="three-pointer"] .chance').textContent =
+            `(${gameData.currentPlayer.three_point_percentage.toFixed(1)}%)`;
+        document.querySelector('button[data-action="layup"] .chance').textContent =
+            `(${gameData.currentPlayer.two_point_percentage.toFixed(1)}%)`;
+        document.querySelector('button[data-action="pass"] .chance').textContent =
+            `(${(gameData.currentPlayer.two_point_percentage + 10).toFixed(1)}%)`;
+        document.querySelector('button[data-action="dunk"] .chance').textContent =
+            `(${(gameData.currentPlayer.two_point_percentage - 10).toFixed(1)}%)`;
+    } else {
+        stateLabel.textContent = 'Defense';
+        offenseOptions.style.display = 'none';
+        defenseOptions.style.display = 'flex';
+        ballPossession.textContent = `${gameData.opponentPlayer.player_name} (${gameData.opponentName})`;
+        
+        // Show away ball, hide home ball during defense
+        if (homeBall) homeBall.style.display = 'none';
+        if (awayBall) awayBall.style.display = 'block';
 
-			const blocksPerGame = Number(gameData.currentPlayer.blocks_per_game);
-			const stealsPerGame = Number(gameData.currentPlayer.steals_per_game);
+        const blocksPerGame = Number(gameData.currentPlayer.blocks_per_game);
+        const stealsPerGame = Number(gameData.currentPlayer.steals_per_game);
 
-			// Convert blocks and steals per game to a reasonable percentage
-			const blockChance = Math.min(80, blocksPerGame * 25);
-			const stealChance = Math.min(70, stealsPerGame * 15);
+        // Convert blocks and steals per game to a reasonable percentage
+        const blockChance = Math.min(80, blocksPerGame * 25);
+        const stealChance = Math.min(70, stealsPerGame * 15);
 
-			// Update chance percentages for defense buttons
-			document.querySelector('button[data-action="block"] .chance').textContent =
-				`(${isNaN(blockChance) ? '18.0' : (18 + blockChance).toFixed(1)}%)`;
-			document.querySelector('button[data-action="steal"] .chance').textContent =
-				`(${isNaN(stealChance) ? '20.0' : (20 + stealChance).toFixed(1)}%)`;
-			document.querySelector('button[data-action="tackle"] .chance').textContent =
-				`(${isNaN(stealChance) ? '15.0' : (15 + (stealChance * 0.8)).toFixed(1)}%)`;
-			document.querySelector('button[data-action="pressure"] .chance').textContent =
-				`(${isNaN(stealChance) ? '40.0' : (40 + stealChance).toFixed(1)}%)`;
-		}
+        // Update chance percentages for defense buttons
+        document.querySelector('button[data-action="block"] .chance').textContent =
+            `(${isNaN(blockChance) ? '18.0' : (18 + blockChance).toFixed(1)}%)`;
+        document.querySelector('button[data-action="steal"] .chance').textContent =
+            `(${isNaN(stealChance) ? '20.0' : (20 + stealChance).toFixed(1)}%)`;
+        document.querySelector('button[data-action="tackle"] .chance').textContent =
+            `(${isNaN(stealChance) ? '15.0' : (15 + (stealChance * 0.8)).toFixed(1)}%)`;
+        document.querySelector('button[data-action="pressure"] .chance').textContent =
+            `(${isNaN(stealChance) ? '40.0' : (40 + stealChance).toFixed(1)}%)`;
+    }
 
-		resultText.textContent = 'Choose an action';
+    resultText.textContent = 'Choose an action';
 
-		playAgainBtn.style.display = 'none';
+    playAgainBtn.style.display = 'none';
 
-		updatePlayerImages();
-	}
+    updatePlayerImages();
+}
 
 	/**
 	 * Update player images based on current players
