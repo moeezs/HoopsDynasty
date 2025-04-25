@@ -1,4 +1,13 @@
+<!--
+    Authors: Grady Rueffer and Abdul Moeez Shaikh
+    Student Numbers: 400579449, 
+    Date: 15-03-2025
+    Description: This file contains functionality and DOM elements for the team
+    building aspect of Hoops Dynasty
+    Links to: menu/index.php (On Main Menu)
+--> 
 <?php
+// Start the session and connect to the database
 session_start();
 require_once("../connect.php");
 
