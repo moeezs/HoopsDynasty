@@ -48,65 +48,64 @@ $userId = $_SESSION["userid"];
 
         <!-- Positions Panel -->
         <div class="positions-panel">
-            <h2 class="positions-title">Positions</h2>
+            <div class="positions-section">
+                <h2 class="positions-title">Positions</h2>
 
-            <div class="positions-list">
-                <div class="position-item active" data-pos="PG">
-                    <div class="position-icon">PG</div>
-                    <div class="position-info">
-                        <div class="position-name">Point Guard</div>
-                        <div class="position-abbr">Playmaker</div>
+                <div class="positions-list">
+                    <div class="position-item active" data-pos="PG">
+                        <div class="position-icon">PG</div>
+                        <div class="position-info">
+                            <div class="position-name">Point Guard</div>
+                        </div>
+                        <div class="position-player"></div>
                     </div>
-                    <div class="position-player"></div>
-                </div>
 
-                <div class="position-item" data-pos="SG">
-                    <div class="position-icon">SG</div>
-                    <div class="position-info">
-                        <div class="position-name">Shooting Guard</div>
-                        <div class="position-abbr">Scorer</div>
+                    <div class="position-item" data-pos="SG">
+                        <div class="position-icon">SG</div>
+                        <div class="position-info">
+                            <div class="position-name">Shooting Guard</div>
+                        </div>
+                        <div class="position-player"></div>
                     </div>
-                    <div class="position-player"></div>
-                </div>
 
-                <div class="position-item" data-pos="SF">
-                    <div class="position-icon">SF</div>
-                    <div class="position-info">
-                        <div class="position-name">Small Forward</div>
-                        <div class="position-abbr">All-Around</div>
+                    <div class="position-item" data-pos="SF">
+                        <div class="position-icon">SF</div>
+                        <div class="position-info">
+                            <div class="position-name">Small Forward</div>
+                        </div>
+                        <div class="position-player"></div>
                     </div>
-                    <div class="position-player"></div>
-                </div>
 
-                <div class="position-item" data-pos="PF">
-                    <div class="position-icon">PF</div>
-                    <div class="position-info">
-                        <div class="position-name">Power Forward</div>
-                        <div class="position-abbr">Inside Scorer</div>
+                    <div class="position-item" data-pos="PF">
+                        <div class="position-icon">PF</div>
+                        <div class="position-info">
+                            <div class="position-name">Power Forward</div>
+                        </div>
+                        <div class="position-player"></div>
                     </div>
-                    <div class="position-player"></div>
-                </div>
 
-                <div class="position-item" data-pos="C">
-                    <div class="position-icon">C</div>
-                    <div class="position-info">
-                        <div class="position-name">Center</div>
-                        <div class="position-abbr">Rim Protector</div>
+                    <div class="position-item" data-pos="C">
+                        <div class="position-icon">C</div>
+                        <div class="position-info">
+                            <div class="position-name">Center</div>
+                        </div>
+                        <div class="position-player"></div>
                     </div>
-                    <div class="position-player"></div>
                 </div>
             </div>
 
             <!-- Team Management Section -->
             <div class="team-management">
                 <h3>Your Teams</h3>
-                <select id="team-select" class="team-select">
-                    <option value="">New Team</option>
-                    <!-- Teams will be loaded here via JavaScript -->
-                </select>
-                <button id="delete-team" class="menu-btn accent">
-                    <i class="fas fa-trash"></i> Delete Team
-                </button>
+                <div class="controls">
+                    <select id="team-select" class="team-select">
+                        <option value="">New Team</option>
+                        <!-- Teams will be loaded here via JavaScript -->
+                    </select>
+                    <button id="delete-team" class="menu-btn accent">
+                        <i class="fas fa-trash"></i> Delete Team
+                    </button>
+                </div>
             </div>
         </div>
 

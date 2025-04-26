@@ -446,11 +446,16 @@ window.addEventListener('load', function () {
     const steals = player.stealsPerGame.toFixed(1);
     const fouls = player.foulsPerGame.toFixed(1);
 
-    // Create preview HTML
+    // Create preview HTML with structured containers for responsive layout
     const previewHTML = `
-      <img src="${player.image}" alt="${player.name}" class="preview-img" onerror="this.src='../images/players/lebron.png'">
-      <h3 class="preview-name">${player.name}</h3>
-      <div class="preview-team">${player.team || 'Free Agent'}</div>
+      <div class="preview-img-container">
+        <img src="${player.image}" alt="${player.name}" class="preview-img" onerror="this.src='../images/players/lebron.png'">
+      </div>
+      <div class="preview-info">
+        <h3 class="preview-name">${player.name}</h3>
+        <div class="preview-team">${player.team || 'Free Agent'}</div>
+        <div class="preview-position">Position: ${getPositionFullName(selectedPosition)}</div>
+      </div>
       
       <div class="preview-stats">
         <div class="stat-item">
@@ -518,7 +523,6 @@ window.addEventListener('load', function () {
 
   // Function to filter players
   function filterPlayers(name, team) {
-    let queriedPlayers = [];
     let params = "";
 
     if (name !== "") {
@@ -528,6 +532,9 @@ window.addEventListener('load', function () {
       if (params !== "") params += "&";
       params += "team=" + encodeURIComponent(team);
     }
+
+    // Show loading indicator
+    playersList.innerHTML = '<div class="loading">Loading players...</div>';
 
     let config = {
       method: 'POST',
@@ -551,13 +558,17 @@ window.addEventListener('load', function () {
           foulsPerGame: parseFloat(player.personal_fouls_per_game) || 0
         }));
 
-        if (players.length === 0 || players[0] === "NONE") {
+        if (players.length === 0) {
           playersList.innerHTML = '<div class="no-results">No matching players found</div>';
           return;
         }
 
         renderPlayersList();
       })
+      .catch(error => {
+        console.error('Error fetching players:', error);
+        playersList.innerHTML = '<div class="error">Failed to load players</div>';
+      });
   }
 
   // Event Listeners

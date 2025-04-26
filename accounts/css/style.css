@@ -100,17 +100,16 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Align to top instead */
-  min-height: 400px; /* Ensure minimum height */
+  justify-content: flex-start;
+  min-height: 400px;
 }
 
 .loginForm .inputBox {
-  margin-bottom: 40px; /* Add more spacing after inputs */
+  margin-bottom: 0;
 }
 
-/* Ensure register section goes to bottom on login page */
 .loginForm + .register {
-  margin-top: auto; /* Push to bottom */
+  margin-top: auto;
   padding-top: 20px;
 }
 
@@ -186,7 +185,6 @@ body {
 
 .register {
   display: flex;
-  align-items: center;
   justify-content: center;
   gap: 10px;
   margin-top: 30px;
@@ -247,6 +245,8 @@ body {
 @media (max-width: 768px) {
   .wrapper {
     flex-direction: column;
+    width: 100%;
+    border: none;
   }
   
   .leftContainer, .rightContainer {
@@ -273,5 +273,9 @@ body {
   
   .rightContainer {
     height: 70%;
+  }
+
+  .loginForm {
+    min-height: 300px;
   }
 }
