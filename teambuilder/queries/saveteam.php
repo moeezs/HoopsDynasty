@@ -2,14 +2,15 @@
 <?php
 
 /**
-    Author: Abdul Moeez Shaikh, Gagan Bhattarai
-    Student Number: 400573061, <student number>
+    Author: Abdul Moeez Shaikh, Grady Rueffer
+    Student Number: 400573061, 400579449
     Date: 23-03-2025
     Description: This file contains functionality to save a team to the database.
     It checks if the user is logged in and if the team name is valid before attempting to save it.
     Links to: teambuilder/teambuilder.php (Redirects user back to the team builder page)
  */
 
+// Connect to database
 include "../../connect.php";
 session_start();
 
@@ -43,28 +44,29 @@ try {
     // Decode JSON data
     $player_names = json_decode($player_names_json, true);
     $positions = json_decode($positions_json, true);
-    
+
     // Debug the received data
     error_log("Player names: " . print_r($player_names, true));
     error_log("Positions: " . print_r($positions, true));
-    
+
     // Make sure we have valid arrays
     if (!is_array($player_names) || !is_array($positions) || count($player_names) !== count($positions)) {
         echo json_encode(["status" => "error", "message" => "Invalid player data format. Names: " . gettype($player_names) . ", Positions: " . gettype($positions)]);
         exit;
     }
-    
+
     // Convert arrays to position-based player names
     $center = "";
     $power_forward = "";
     $small_forward = "";
     $point_guard = "";
     $shooting_guard = "";
-    
+
+    // Assign positions from players
     for ($i = 0; $i < count($positions); $i++) {
         $position = $positions[$i];
         $player_name = $player_names[$i];
-        
+
         switch ($position) {
             case 'C':
                 $center = $player_name;
@@ -83,18 +85,19 @@ try {
                 break;
         }
     }
-    
+
     // Check if the team already exists
     $checkCommand = "SELECT id FROM hoopsdynastyteams WHERE team_name = ? AND creator = ?";
     $checkStmt = $dbh->prepare($checkCommand);
     $checkStmt->execute([$team_name, $creator]);
-    
+
     if ($checkStmt->fetch()) {
         // Update existing team
         $command = "UPDATE hoopsdynastyteams SET center = ?, power_forward = ?, small_forward = ?, point_guard = ?, shooting_guard = ? WHERE team_name = ? AND creator = ?";
         $stmt = $dbh->prepare($command);
         $success = $stmt->execute([$center, $power_forward, $small_forward, $point_guard, $shooting_guard, $team_name, $creator]);
-    
+
+        // Return JSON result
         if ($success) {
             echo json_encode(["status" => "success", "message" => "Team updated successfully."]);
         } else {
@@ -105,7 +108,8 @@ try {
         $command = "INSERT INTO hoopsdynastyteams (creator, team_name, access, center, power_forward, small_forward, point_guard, shooting_guard) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $dbh->prepare($command);
         $success = $stmt->execute([$creator, $team_name, 0, $center, $power_forward, $small_forward, $point_guard, $shooting_guard]);
-    
+
+        // Return JSON result
         if ($success) {
             echo json_encode(["status" => "success", "message" => "Team saved successfully."]);
         } else {

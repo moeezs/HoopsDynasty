@@ -11,11 +11,13 @@
     Links to: teambuilder/teambuilder.php (Redirects user back to the team builder page)
  */
 
+// Connect to database
 include "../../connect.php";
 session_start();
 
 header("Content-Type: application/json");
 
+// Gather parameters
 $team_name = filter_input(INPUT_POST, "team_name", FILTER_SANITIZE_SPECIAL_CHARS);
 $creator = isset($_SESSION["userid"]) ? $_SESSION["userid"] : null;
 
@@ -32,14 +34,14 @@ try {
                 WHERE team_name = ? AND creator = ?";
     $stmt = $dbh->prepare($command);
     $stmt->execute([$team_name, $creator]);
-    
+
     $team = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if (!$team) {
         echo json_encode(["status" => "error", "message" => "Team not found"]);
         exit;
     }
-    
+
     // Get player details for each position
     $players = [];
     $positions = [
@@ -49,10 +51,12 @@ try {
         'PG' => $team['point_guard'],
         'SG' => $team['shooting_guard']
     ];
-    
+
+    // Gather player details per each position
     foreach ($positions as $pos => $playerName) {
         if (empty($playerName)) continue;
-        
+
+        // Query the database for a player
         $playerCommand = "SELECT player_id, player_name, player_team, three_point_percentage, 
                            two_point_percentage, free_throw_percentage, blocks_per_game, 
                            steals_per_game, personal_fouls_per_game, photo 
@@ -61,26 +65,26 @@ try {
         $playerStmt = $dbh->prepare($playerCommand);
         $playerStmt->execute([$playerName]);
         $player = $playerStmt->fetch(PDO::FETCH_ASSOC);
-        
+
+        // Store player data for return
         if ($player) {
             // Convert blob to base64 encoded string for image display
             $photoBase64 = null;
             if ($player["photo"] && strlen($player["photo"]) > 0) {
                 $photoBase64 = 'data:image/jpeg;base64,' . base64_encode($player["photo"]);
             }
-            
+
             $player['photo'] = $photoBase64;
             $player['position'] = $pos;
             $players[] = $player;
         }
     }
-    
+
+    // Return JSON encoded players
     echo json_encode([
         "status" => "success",
         "players" => $players
     ]);
-    
 } catch (Exception $e) {
     echo json_encode(["status" => "error", "message" => "An error occurred: " . $e->getMessage()]);
 }
-?>

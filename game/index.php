@@ -31,6 +31,7 @@ foreach ($directories as $dir) {
   <title>Hoops Dynasty Basketball Game Simulation</title>
   <link rel="stylesheet" href="css/game.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="icon" type="image/x-icon" href="../images/icon/hoopsIcon.png">
 </head>
 <body>
   <div class="main-container">

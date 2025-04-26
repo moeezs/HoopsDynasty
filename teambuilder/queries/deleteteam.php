@@ -1,19 +1,21 @@
 <?php
 
 /**
-    Author: Abdul Moeez Shaikh
-    Student Number: 400573061
+    Author: Grady Rueffer, Abdul Moeez Shaikh
+    Student Number: 400579449, 400573061
     Date: 23-03-2025
     Description: This file contains functionality to delete a team from the database.
     It checks if the user is logged in and if the team name is valid before attempting to delete it.
     Links to: teambuilder/teambuilder.php (Redirects user back to the team builder page)
  */
 
+// Connect to database
 include "../../connect.php";
 session_start();
 
 header("Content-Type: application/json");
 
+// Gather user and query data
 $creator = isset($_SESSION["userid"]) ? $_SESSION["userid"] : null;
 $team_name = filter_input(INPUT_POST, "team_name", FILTER_SANITIZE_SPECIAL_CHARS);
 

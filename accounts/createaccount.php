@@ -1,4 +1,5 @@
 <?php
+
 /**
     Author: Grady Rueffer, Gagan Bhattarai
     Student Number: 400579449, <student number>
@@ -27,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check that all fieds have been received
     if (!$username || !$password || !$password2 || !$firstname || !$lastname || !$email) {
         $error = "All fields are required";
-    } 
+    }
 
     // Validate matching passwords
     elseif ($password !== $password2) {
@@ -36,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if username already exists
         $checkUserStmt = $dbh->prepare("SELECT username FROM hoopsdynastyusers WHERE username = ?");
         $checkUserStmt->execute([$username]);
-        
+
         // If user is found, report back a player found error
         if ($checkUserStmt->rowCount() > 0) {
             $error = "Username already exists";
@@ -47,9 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $cmd = "INSERT INTO `hoopsdynastyusers`(`username`, `password`, `firstname`, `lastname`, `accesslevel`, `email`) VALUES (?,?,?,?,0,?)";
                 $stmt = $dbh->prepare($cmd);
                 $stmt->execute([$username, password_hash($password, PASSWORD_BCRYPT), $firstname, $lastname, $email]);
-                
+
                 $registrationSuccess = true;
-                
+
                 // Redirect to signin page after successful registration
                 header("Location: ./signin.php?registration=success");
                 exit;
@@ -70,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Hoops Dynasty Basketball Simulator - Create Account</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="js/passwordvalidation.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="../images/icon/hoopsIcon.png">
 </head>
 
 <body>
@@ -86,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h1>Create Account</h1>
                 <p>Sign up to start building your basketball dynasty!</p>
                 <?php if ($error): ?>
-                <p class="error-message"><?= htmlspecialchars($error) ?></p>
+                    <p class="error-message"><?= htmlspecialchars($error) ?></p>
                 <?php endif; ?>
             </div>
 
@@ -112,4 +114,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </body>
+
 </html>

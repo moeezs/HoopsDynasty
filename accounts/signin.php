@@ -1,4 +1,5 @@
 <?php
+
 /**
     Author: Grady Rueffer, Gagan Bhattarai
     Student Number: 400579449, <student number>
@@ -32,6 +33,7 @@ if (isset($_SESSION['login_error']) && $_SESSION['login_error'] === 'invalid') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hoops Dynasty Basketball Simulator - Login</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="../images/icon/hoopsIcon.png">
 </head>
 
 <body>
@@ -48,7 +50,7 @@ if (isset($_SESSION['login_error']) && $_SESSION['login_error'] === 'invalid') {
                 <h1>Login</h1>
                 <p>Welcome Back! Please login to your account.</p>
                 <?php if ($loginError): ?>
-                <p class="error-message">Invalid username or password</p>
+                    <p class="error-message">Invalid username or password</p>
                 <?php endif; ?>
             </div>
 
@@ -74,4 +76,5 @@ if (isset($_SESSION['login_error']) && $_SESSION['login_error'] === 'invalid') {
         </div>
     </div>
 </body>
+
 </html>
