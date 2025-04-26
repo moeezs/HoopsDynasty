@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 26, 2025 at 10:33 PM
+-- Generation Time: Apr 26, 2025 at 10:51 PM
 -- Server version: 9.1.0-commercial
 -- PHP Version: 8.2.25
 
@@ -52,7 +52,6 @@ INSERT INTO `hoopsdynastyusers` (`id`, `username`, `password`, `firstname`, `las
 (10, 'moeez1', '$2y$10$ca1fT2aRvPTItEUfDGEqqOjo08u1vEBWP.WnEaiffivJhjhV3fyuq', 'Mo', 'Money', 0, 'moee2z@gmail.com'),
 (11, 'testing', '$2y$10$MC.Noj/yriWIgOwtoo.EceveFGqlln/oHMblI9YNKFoPuhkPFDS36', 'Test', 'qwe', 0, 'test@gmail.com'),
 (12, 'test', '$2y$10$ua5beoGiqMb7RieXGThXQunowElpK6AP4JWyd01LHCMptFsU5eyEC', 'Test Again', '1', 0, 'anothertest@gmail.com'),
-(13, 'Grady (dmgg)', '$2y$10$7J/qi0vAPUXTYr3NOlWVwOwAdIbURCYitjNeQS.3ghj3mN8iYHO.a', 'Grady', 'Rueffer', 0, 'wouldn\'t@youliketoknow.weatherboy'),
 (14, 'testingAgain', '$2y$10$VFIre9DW9RDORAxYVPuGnuua6/HTA01awwGcGxqYQ2Wys7ttINteq', 'Lmao', 'qwe', 0, 'qwe@1.x'),
 (15, 'Gagan', '$2y$10$WgI7pBBCYUhiQA0Bhh0k5.18Lq6t3BcKhTRL4/zE4U4GGVIuFJ/Pe', 'Gagan', 'Gagan', 0, 'Gagan@Gagan.com'),
 (16, 'daryl', '$2y$10$JScgRo51uLzTuTUpS69/pu46cJLOFHJlPWqWn141m7fZEsDJCNwXe', 'Daryl', 'John', 0, 'daryl@daryl.com'),
