@@ -510,8 +510,10 @@ a.menu-btn.disabled {
     padding: 10px;
     border-radius: 6px;
     font-size: 1rem;
+    background-image: url("../../images/arrow.svg");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 1rem;
     padding-right: 2.5rem; 
+    line-height: 1.5;
 }

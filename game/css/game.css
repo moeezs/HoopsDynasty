@@ -254,7 +254,7 @@ body {
   flex-direction: column;
   box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
   z-index: 50;
-  height: 120px;
+  height: 140px; 
 }
 
 .action-buttons {
@@ -369,7 +369,7 @@ body {
   }
   
   .action-panel {
-    height: 130px;
+    height: 150px; 
   }
   
   .action-btn .action-name {
@@ -429,7 +429,7 @@ body {
   }
   
   .action-panel {
-    height: 120px;
+    height: 160px; /* Increased height for mobile */
   }
   
   .action-buttons {
@@ -458,9 +458,13 @@ body {
     font-size: 0.7rem;
   }
   
+  .game-info {
+    top: 10px; 
+  }
+  
   .game-state-indicator {
-    font-size: 1.4rem;
-    padding: 8px 15px;
-    top: 60px;
+    font-size: 1.2rem; /* Smaller font */
+    padding: 6px 12px;
+    top: 90px; 
   }
 }
