@@ -1,7 +1,7 @@
 <?php
 /**
     Author: Gagan Bhattarai
-    Student Number: <student number>
+    Student Number: 400585207
     Date: 20-03-2025
     Description: This file contains the PHP code needed to
     get the player images from the database and display them
