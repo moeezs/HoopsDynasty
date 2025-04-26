@@ -1,173 +1,189 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
-    const teamSelect = document.getElementById('teamSelect');
-    const playGameLink = document.getElementById('playGameLink');
-    const opponentModal = document.getElementById('opponentModal');
-    const modalClose = document.querySelector('.modal-close');
-    const playerSpots = document.querySelectorAll('.player-spot');
-    const startGameBtn = document.getElementById('startGameBtn');
-    const userTeamIdInput = document.getElementById('userTeamId');
-    const opponentTeamIdInput = document.getElementById('opponentTeamId');
+/**
+  Author: Abdul Moeez Shaikh
+  Student Number: 400573061
+  Date: 20-03-2025
+  Description: This file contains all of the Javascript for the Main Menu (Home Page).
+    Controls all the team selection, starting game and the main connection to all parts of the project.
+  Used in: menu/index.php
+*/
 
-    // Function to update player spots with selected team
-    async function updatePlayerSpots(teamId) {
-      if (!teamId) return;
+window.addEventListener('load', function () {
+  // DOM Elements
+  const teamSelect = document.getElementById('teamSelect');
+  const playGameLink = document.getElementById('playGameLink');
+  const opponentModal = document.getElementById('opponentModal');
+  const modalClose = document.querySelector('.modal-close');
+  const playerSpots = document.querySelectorAll('.player-spot');
+  const startGameBtn = document.getElementById('startGameBtn');
+  const userTeamIdInput = document.getElementById('userTeamId');
+  const opponentTeamIdInput = document.getElementById('opponentTeamId');
 
-      const selectedOption = teamSelect.options[teamSelect.selectedIndex];
-      if (!selectedOption) return;
+  /**
+   * Updates player spots on the court with the selected team's players
+   * @param {string} teamId - ID of the selected team
+   */
+  async function updatePlayerSpots(teamId) {
+    if (!teamId) return;
 
-      const team = {
-        name: selectedOption.text,
-        players: JSON.parse(selectedOption.getAttribute('data-players'))
-      };
+    const selectedOption = teamSelect.options[teamSelect.selectedIndex];
+    if (!selectedOption) return;
 
-      // Update team info card
-      document.querySelector('.team-card-name').textContent = team.name;
+    const team = {
+      name: selectedOption.text,
+      players: JSON.parse(selectedOption.getAttribute('data-players'))
+    };
 
-      // Update player spots
-      let positionCount = 0;
-      for (const [position, playerName] of Object.entries(team.players)) {
-        const spot = document.querySelector(`.player-spot[data-position="${position}"]`);
-        if (spot) {
-          spot.querySelector('.player-name').textContent = playerName;
+    // Update team info card
+    document.querySelector('.team-card-name').textContent = team.name;
 
-          switch (positionCount) {
-            case 0: {
-              document.getElementById("C").src = await getPhoto(playerName);
-              document.getElementById("Cd").src = await getPhoto(playerName);
-              break;
-            }
-            case 1: {
-              document.getElementById("PF").src = await getPhoto(playerName);
-              document.getElementById("PFd").src = await getPhoto(playerName);
-              break;
-            }
-            case 2: {
-              document.getElementById("SF").src = await getPhoto(playerName);
-              document.getElementById("SFd").src = await getPhoto(playerName);
-              break;
-            }
-            case 3: {
-              document.getElementById("PG").src = await getPhoto(playerName);
-              document.getElementById("PGd").src = await getPhoto(playerName);
-              break;
-            }
-            case 4: {
-              document.getElementById("SG").src = await getPhoto(playerName);
-              document.getElementById("SGd").src = await getPhoto(playerName);
-              break;
-            }
+    // Update player spots
+    let positionCount = 0;
+    for (const [position, playerName] of Object.entries(team.players)) {
+      const spot = document.querySelector(`.player-spot[data-position="${position}"]`);
+      if (spot) {
+        spot.querySelector('.player-name').textContent = playerName;
+
+        switch (positionCount) {
+          case 0: {
+            document.getElementById("C").src = await getPhoto(playerName);
+            document.getElementById("Cd").src = await getPhoto(playerName);
+            break;
           }
-
-          positionCount++;
+          case 1: {
+            document.getElementById("PF").src = await getPhoto(playerName);
+            document.getElementById("PFd").src = await getPhoto(playerName);
+            break;
+          }
+          case 2: {
+            document.getElementById("SF").src = await getPhoto(playerName);
+            document.getElementById("SFd").src = await getPhoto(playerName);
+            break;
+          }
+          case 3: {
+            document.getElementById("PG").src = await getPhoto(playerName);
+            document.getElementById("PGd").src = await getPhoto(playerName);
+            break;
+          }
+          case 4: {
+            document.getElementById("SG").src = await getPhoto(playerName);
+            document.getElementById("SGd").src = await getPhoto(playerName);
+            break;
+          }
         }
-      }
 
-      // Enable play button
-      playGameLink.classList.remove('disabled');
-      userTeamIdInput.value = teamId;
-
-      // Save selected team to localStorage
-      localStorage.setItem('selectedTeam', teamId);
-    }
-
-    async function getPhoto(name) {
-      let params = "name=" + encodeURIComponent(name);
-
-      let config = {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: params
-      };
-
-      try {
-        const response = await fetch("../menu/queries/getspecifiedplayer.php", config);
-        const data = await response.json();
-
-        if (data && data.photo_base64) {
-          return "data:image/jpeg;base64," + data.photo_base64;
-        } else {
-          return "../images/players/lebron.png"; // fallback image
-        }
-      } catch (err) {
-        console.error("Photo fetch error for", name, err);
-        return "../images/players/lebron.png";
+        positionCount++;
       }
     }
 
+    // Enable play button
+    playGameLink.classList.remove('disabled');
+    userTeamIdInput.value = teamId;
 
-    // Event Listeners
-    teamSelect.addEventListener('change', () => {
-      updatePlayerSpots(teamSelect.value);
-    });
+    // Save selected team to localStorage
+    localStorage.setItem('selectedTeam', teamId);
+  }
 
-    playGameLink.addEventListener('click', (e) => {
-      if (playGameLink.classList.contains('disabled')) {
-        e.preventDefault();
-        alert('Please select a team first');
+  /**
+   * Fetches player photo from the server
+   * @param {string} name - Name of the player
+   * @returns {string} - URL of player photo or fallback image
+   */
+  async function getPhoto(name) {
+    let params = "name=" + encodeURIComponent(name);
+
+    let config = {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: params
+    };
+
+    try {
+      const response = await fetch("../menu/queries/getspecifiedplayer.php", config);
+      const data = await response.json();
+
+      if (data && data.photo_base64) {
+        return "data:image/jpeg;base64," + data.photo_base64;
       } else {
-        e.preventDefault();
-        opponentModal.classList.add('active');
+        return "../images/players/lebron.png"; // fallback image
       }
-    });
-
-    modalClose.addEventListener('click', () => {
-      opponentModal.classList.remove('active');
-    });
-
-    // Close modal if clicking outside of content
-    opponentModal.addEventListener('click', (e) => {
-      if (e.target === opponentModal) {
-        opponentModal.classList.remove('active');
-      }
-    });
-
-    // Team cards in modal are clickable
-    document.querySelectorAll('.team-list .team-card').forEach(card => {
-      card.addEventListener('click', () => {
-        // Remove selected class from all cards
-        document.querySelectorAll('.team-list .team-card').forEach(c => {
-          c.classList.remove('selected');
-        });
-
-        // Add selected class to clicked card
-        card.classList.add('selected');
-
-        // Set opponent team id
-        opponentTeamIdInput.value = card.getAttribute('data-team-id');
-
-        // Enable start game button
-        startGameBtn.disabled = false;
-      });
-    });
-
-    // Add hover effect to player spots
-    playerSpots.forEach(spot => {
-      spot.addEventListener('mouseenter', () => {
-        spot.style.transform = 'scale(1.1)';
-      });
-
-      spot.addEventListener('mouseleave', () => {
-        spot.style.transform = 'scale(1)';
-      });
-    });
-
-    // Initialize with default team if available
-    if (localStorage.getItem('selectedTeam')) {
-      const savedTeam = localStorage.getItem('selectedTeam');
-      teamSelect.value = savedTeam;
-      if (teamSelect.value === savedTeam) { // Only if the team still exists
-        updatePlayerSpots(savedTeam);
-      }
+    } catch (err) {
+      console.error("Photo fetch error for", name, err);
+      return "../images/players/lebron.png";
     }
+  }
 
-    // Validate game form submission
-    document.getElementById('gameForm').addEventListener('submit', (e) => {
-      if (!userTeamIdInput.value || !opponentTeamIdInput.value) {
-        e.preventDefault();
-        alert('Please select both your team and an opponent');
-      }
+  // Event Listeners
+  teamSelect.addEventListener('change', () => {
+    updatePlayerSpots(teamSelect.value);
+  });
+
+  playGameLink.addEventListener('click', (e) => {
+    if (playGameLink.classList.contains('disabled')) {
+      e.preventDefault();
+      alert('Please select a team first');
+    } else {
+      e.preventDefault();
+      opponentModal.classList.add('active');
+    }
+  });
+
+  modalClose.addEventListener('click', () => {
+    opponentModal.classList.remove('active');
+  });
+
+  // Close modal if clicking outside of content
+  opponentModal.addEventListener('click', (e) => {
+    if (e.target === opponentModal) {
+      opponentModal.classList.remove('active');
+    }
+  });
+
+  // Team cards in modal are clickable
+  document.querySelectorAll('.team-list .team-card').forEach(card => {
+    card.addEventListener('click', () => {
+      // Remove selected class from all cards
+      document.querySelectorAll('.team-list .team-card').forEach(c => {
+        c.classList.remove('selected');
+      });
+
+      // Add selected class to clicked card
+      card.classList.add('selected');
+
+      // Set opponent team id
+      opponentTeamIdInput.value = card.getAttribute('data-team-id');
+
+      // Enable start game button
+      startGameBtn.disabled = false;
     });
   });
+
+  // Add hover effect to player spots
+  playerSpots.forEach(spot => {
+    spot.addEventListener('mouseenter', () => {
+      spot.style.transform = 'scale(1.1)';
+    });
+
+    spot.addEventListener('mouseleave', () => {
+      spot.style.transform = 'scale(1)';
+    });
+  });
+
+  // Initialize with default team if available
+  if (localStorage.getItem('selectedTeam')) {
+    const savedTeam = localStorage.getItem('selectedTeam');
+    teamSelect.value = savedTeam;
+    if (teamSelect.value === savedTeam) { // Only if the team still exists
+      updatePlayerSpots(savedTeam);
+    }
+  }
+
+  // Validate game form submission
+  document.getElementById('gameForm').addEventListener('submit', (e) => {
+    if (!userTeamIdInput.value || !opponentTeamIdInput.value) {
+      e.preventDefault();
+      alert('Please select both your team and an opponent');
+    }
+  });
+});

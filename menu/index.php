@@ -152,18 +152,28 @@ try {
   $allTeams = [];
 }
 
-// Calculate team rating based on player positions
+/**
+ * Calculates the rating of a team based on player data
+ * 
+ * @param array $teamData - Array containing team information
+ * @return int - Team rating between 70-95
+ */
 function calculateTeamRating($teamData)
 {
-  // A more sophisticated rating algorithm could be implemented here
-  // For now, just return a score between 70-95
   return rand(70, 95);
 }
 
 // Check for error message
 $errorMsg = "";
-if (isset($_GET['error']) && $_GET['error'] == 'noteams') {
+// Check for error message in session instead of GET parameters
+if (isset($_SESSION['error'])) {
+  $errorMsg = $_SESSION['error'];
+  // Clear the error after displaying it
+  unset($_SESSION['error']);
+} else if (isset($_SESSION['noteams_error'])) {
   $errorMsg = "Please select a team before starting a game.";
+  // Clear the error after displaying it
+  unset($_SESSION['noteams_error']);
 }
 ?>
 <!DOCTYPE html>

@@ -1,5 +1,15 @@
 
 <?php
+
+/**
+    Author: Abdul Moeez Shaikh, Gagan Bhattarai
+    Student Number: 400573061, <student number>
+    Date: 23-03-2025
+    Description: This file contains functionality to save a team to the database.
+    It checks if the user is logged in and if the team name is valid before attempting to save it.
+    Links to: teambuilder/teambuilder.php (Redirects user back to the team builder page)
+ */
+
 include "../../connect.php";
 session_start();
 

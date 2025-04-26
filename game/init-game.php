@@ -1,7 +1,7 @@
 <?php
 /**
-    Author: Daryl John
-    Student Number: 400583895
+    Author: Daryl John, Gagan Bhattarai
+    Student Number: 400583895, <student number>
     Date: 20-03-2025
     Description: This file contains the PHP code needed to
     turn all of the needed player data into an object at

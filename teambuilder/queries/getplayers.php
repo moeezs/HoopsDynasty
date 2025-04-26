@@ -1,4 +1,13 @@
 <?php
+
+/**
+    Author: Abdul Moeez Shaikh
+    Student Number: 400573061
+    Date: 23-03-2025
+    Description: This file contains functionality to retrieve player data from the database based on user input.
+    Links to: teambuilder/teambuilder.php (Redirects user back to the team builder page)
+ */
+
 include "../../connect.php";
 
 $player_name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_SPECIAL_CHARS);

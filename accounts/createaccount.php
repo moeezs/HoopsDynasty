@@ -1,7 +1,7 @@
 <?php
 /**
-    Author: Grady Rueffer
-    Student Number: 400579449
+    Author: Grady Rueffer, Gagan Bhattarai
+    Student Number: 400579449, <student number>
     Date: 15-03-2025
     Description: This file contains functionality to receive post parameters
     from a form sent by itself to create an acoount on the database.

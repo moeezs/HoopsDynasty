@@ -6,7 +6,7 @@
     handle the game logic and UI interactions for the game
 */ 
 
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', function () {
 	let gameData = {
 		teamPlayers: [],
 		opponentPlayers: [],

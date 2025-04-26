@@ -1,6 +1,6 @@
 /*
-    Author: Abdul Moeez Shaikh and Daryl John
-    Student Number: 400573061 and 400583895
+    Author: Abdul Moeez Shaikh
+    Student Number: 400573061
     Date: 20-03-2025
     Description: This file contains all of the CSS code needed to
     style the elements of the game page and it's display
@@ -15,7 +15,6 @@
 body {
   font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   color: #fff;
-  background-image: url('https://wallpapercave.com/wp/wp3049246.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -105,7 +104,7 @@ body {
   align-items: center;
   padding: 20px;
   position: relative;
-  background-image: url('https://www.transparenttextures.com/patterns/basketball.png');
+  background-image: url('../../images/pattern.png');
   background-blend-mode: overlay;
   overflow: hidden;
 }

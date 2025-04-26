@@ -1,4 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
+/**
+  Author: Abdul Moeez Shaikh
+  Student Number: 400573061
+  Date: 20-03-2025
+  Description: This file contains all of the Javascript for the Team Builder interface.
+    Controls the player selection, team management, and player preview functionalities.
+  Used in: teambuilder/index.php
+*/
+
+window.addEventListener('load', function () {
   // DOM Elements
   const positionItems = document.querySelectorAll('.position-item');
   const playersList = document.getElementById('players-list');

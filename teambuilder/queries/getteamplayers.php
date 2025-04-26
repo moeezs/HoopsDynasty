@@ -1,4 +1,16 @@
 <?php
+
+/**
+    Author: Abdul Moeez Shaikh
+    Student Number: 400573061
+    Date: 23-03-2025
+    Description: This file gets the players of a team from the database based on the team name and creator ID.
+    It retrieves the player details for each position (center, power forward, small forward, point guard, shooting guard)
+    and returns the data in JSON format. The player photo is converted to a base64 encoded string for display purposes.
+    It also handles errors and checks if the user is logged in.
+    Links to: teambuilder/teambuilder.php (Redirects user back to the team builder page)
+ */
+
 include "../../connect.php";
 session_start();
 

@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-
 body {
   font-family: 'Poppins', sans-serif;
 }
@@ -19,7 +17,8 @@ body {
 }
 
 .wrapper {
-  height: 80vh;
+  height: auto;
+  min-height: 80vh; /* Slightly increased minimum height */
   width: 120vh;
   margin: auto;
   display: flex;
@@ -35,7 +34,7 @@ body {
 .leftContainer {
   width: 50%;
   height: 100%;
-  padding: 40px;
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,7 +64,7 @@ body {
   flex-direction: column;
   width: 50%;
   background-color: white;
-  padding: 40px 30px;
+  padding: 25px 30px;
   overflow-y: auto;
   height: 100%;
 }
@@ -88,10 +87,23 @@ body {
   margin-bottom: 30px;
 }
 
+/* Adjustments for login page layout */
 .loginForm {
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start; /* Align to top instead */
+  min-height: 400px; /* Ensure minimum height */
+}
+
+.loginForm .inputBox {
+  margin-bottom: 40px; /* Add more spacing after inputs */
+}
+
+/* Ensure register section goes to bottom on login page */
+.loginForm + .register {
+  margin-top: auto; /* Push to bottom */
+  padding-top: 20px;
 }
 
 .inputBox {
@@ -185,7 +197,20 @@ body {
 
 /* Create Account Form Styles */
 .createForm .inputBox {
-  gap: 15px;
+  gap: 8px;
+}
+
+.createForm .inputBox input {
+  padding: 10px;
+  font-size: 0.95rem;
+}
+
+.createForm .title {
+  margin-bottom: 15px;
+}
+
+.createForm .register {
+  margin-top: 15px;
 }
 
 .error-message {
@@ -198,12 +223,16 @@ body {
 @media (max-width: 1200px) {
   .wrapper {
     width: 95%;
-    height: auto;
+    height: auto; /* Slightly increased minimum height */
     min-height: 80vh;
   }
   
   .leftContainer div h1 {
     font-size: 3rem;
+  }
+
+  .createForm .inputBox input {
+    padding: 8px;
   }
 }
 

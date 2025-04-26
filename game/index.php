@@ -1,7 +1,7 @@
 <?php
 /**
-    Author: Daryl John
-    Student Number: 400583895
+    Author: Abdul Moeez Shaikh
+    Student Number: 400573061
     Date: 20-03-2025
     Description: This file contains the HTML and PHP code
     needed to display the elements of the main game page

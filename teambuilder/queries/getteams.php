@@ -1,4 +1,13 @@
 <?php
+
+/**
+    Author: Abdul Moeez Shaikh, Gagan Bhattarai
+    Student Number: 400573061
+    Date: 23-03-2025
+    Description: This file gets the names of the teams that are created by the logged in user from the database based on the creator ID.
+    Links to: teambuilder/teambuilder.php (Redirects user back to the team builder page)
+ */
+
 include "../../connect.php";
 session_start();
 
