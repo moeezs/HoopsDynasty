@@ -1,7 +1,7 @@
 <?php
 /** 
     Authors: Grady Rueffer and Abdul Moeez Shaikh
-    Student Numbers: 400579449, 
+    Student Numbers: 400579449, 400573061
     Date: 15-03-2025
     Description: This file contains functionality and DOM elements for the team
     building aspect of Hoops Dynasty

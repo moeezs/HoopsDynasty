@@ -1,7 +1,7 @@
 <?php
 /**
     Author: Abdul Mooez Shaikh, Grady Rueffer
-    Student Number: ,400579449
+    Student Number: 400573061, 400579449
     Date: 20-03-2025
     Description: This file contains functionality and DOM elements for the main
     menu, start game, and team selection aspect of Hoops Dynasty
