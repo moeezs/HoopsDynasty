@@ -7,6 +7,7 @@
     database given a player name, returning the data as JSON
     Used in: menu.js
  */
+
 header('Content-Type: application/json');
 include "../../connect.php";
 

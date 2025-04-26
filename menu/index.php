@@ -1,8 +1,13 @@
 <?php
-
 /**
- * Main menu for NBA Basketball Simulator.
+    Author: Abdul Mooez Shaikh, Grady Rueffer
+    Student Number: ,400579449
+    Date: 20-03-2025
+    Description: This file contains functionality and DOM elements for the main
+    menu, start game, and team selection aspect of Hoops Dynasty
+    Links to: accounts/logout.php, accounts/signin.php, game/index.php
  */
+
 include "../connect.php";
 
 // Start the session
