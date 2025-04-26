@@ -1,12 +1,12 @@
-<!--
+<?php
+/**
     Author: Grady Rueffer
     Student Number: 400579449
     Date: 20-03-2025
     Description: This file contains functionality to retrieve player data from the
     database given a player name, returning the data as JSON
     Used in: menu.js
---> 
-<?php
+ */
 header('Content-Type: application/json');
 include "../../connect.php";
 

@@ -1,4 +1,5 @@
-<!--
+<?php
+/**
     Author: Grady Rueffer
     Student Number: 400579449
     Date: 15-03-2025
@@ -7,8 +8,8 @@
     accounts/(createaccount.php, signin.php), menu/(index.php, getspecifiedplayer.php),
     teambuilder/(deleteteam.php, getplayers.php, getteamplayers.php, getteams.php,
     saveteams.php, index.php), index.php
---> 
-<?php
+ */
+
 try {
     $dbh = new PDO(
         "mysql:host=localhost;dbname=ruefferg_db",  

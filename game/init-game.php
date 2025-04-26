@@ -1,13 +1,13 @@
-<!--
+<?php
+/**
     Author: Daryl John
     Student Number: 400583895
     Date: 20-03-2025
     Description: This file contains the PHP code needed to
     turn all of the needed player data into an object at
     the start of the game
---> 
+ */
 
-<?php
 require_once '../connect.php';
 header('Content-Type: application/json');
 

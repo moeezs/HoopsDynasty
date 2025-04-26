@@ -89,11 +89,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data && data.photo_base64) {
           return "data:image/jpeg;base64," + data.photo_base64;
         } else {
-          return "../../images/players/lebron.png"; // fallback image
+          return "../images/players/lebron.png"; // fallback image
         }
       } catch (err) {
         console.error("Photo fetch error for", name, err);
-        return "../../images/players/lebron.png";
+        return "../images/players/lebron.png";
       }
     }
 

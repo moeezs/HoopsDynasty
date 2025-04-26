@@ -1,12 +1,13 @@
-<!--
+<?php
+/**
     Author: Grady Rueffer
     Student Number: 400579449
     Date: 15-03-2025
     Description: This file contains functionality to receive post parameters
     from a form sent by itself to create an acoount on the database.
     Links to: signin.php (On Sign In or successful account creation), createaccont.php (Links to itself)
---> 
-<?php
+ */
+
 // Include the database connection
 include "../connect.php";
 

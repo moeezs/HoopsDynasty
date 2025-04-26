@@ -1,12 +1,12 @@
-<!--
+<?php
+/**
     Author: Daryl John
     Student Number: 400583895
     Date: 20-03-2025
     Description: This file contains the PHP functions needed to
     get the specific player data from the database
---> 
+ */
 
-<?php
 include "../connect.php";
 include "connector.php";
 
@@ -14,26 +14,64 @@ session_start();
 header('Content-Type: application/json');
 
 /**
+ * Get player details by ID
+ * @param int $playerId - Player ID to retrieve
+ * @param string $source - Database table to query ('getTeam' or 'getOpponent')
+ * @return array - Player data
+ */
+function getPlayerById($playerId, $source = 'getTeam')
+{
+    global $dbh;
+
+    try {
+        $validSources = ['getTeam', 'getOpponent'];
+        if (!in_array($source, $validSources)) {
+            $source = 'getTeam';
+        }
+
+        $sql = "SELECT player_ID, player_name, player_position, player_team,
+                three_point_percentage, two_point_percentage, free_throw_percentage,
+                blocks_per_game, steals_per_game, personal_fouls_per_game
+                FROM $source WHERE player_ID = :player_id";
+
+        $stmt = $dbh->prepare($sql);
+        $stmt->bindParam(':player_id', $playerId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $player = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($player) {
+            $player['probabilities'] = calculateActionProbabilities($player);
+        }
+
+        return $player;
+    } catch (PDOException $e) {
+        handleDbError($e);
+    }
+}
+
+/**
  * Get player details by name
  * @param string $playerName - Player name to search for
  * @return array - Player data
  */
-function getPlayerByName($playerName) {
+function getPlayerByName($playerName)
+{
     global $dbh;
-    
+
     try {
         $sql = "SELECT player_ID as id, player_name as name, player_position as position, player_team as team, 
                 three_point_percentage, two_point_percentage, free_throw_percentage, 
                 blocks_per_game, steals_per_game, personal_fouls_per_game 
                 FROM hoopsdynastyplayers WHERE player_name LIKE :player_name LIMIT 1";
-        
+
         $stmt = $dbh->prepare($sql);
         $searchName = "%$playerName%";
         $stmt->bindParam(':player_name', $searchName, PDO::PARAM_STR);
         $stmt->execute();
-        
+
         $player = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if ($player) {
             $player['three_point_percentage'] = floatval($player['three_point_percentage']);
             $player['two_point_percentage'] = floatval($player['two_point_percentage']);
@@ -46,7 +84,7 @@ function getPlayerByName($playerName) {
             $player['player_ID'] = $player['id'];
             $player['player_position'] = $player['position'];
             $player['player_team'] = $player['team'];
-            
+
             return $player;
         }
 
@@ -75,7 +113,8 @@ function getPlayerByName($playerName) {
 /**
  * Determine player position from name or position identifier
  */
-function determinePositionFromName($name) {
+function determinePositionFromName($name)
+{
     $name = strtolower($name);
     if (strpos($name, 'center') !== false || strpos($name, ' c ') !== false || $name === 'c') return 'C';
     if (strpos($name, 'power forward') !== false || strpos($name, ' pf ') !== false || $name === 'pf') return 'PF';
@@ -120,7 +159,8 @@ sendJsonResponse([
  * @param array $data - Data to send
  * @param int $status - HTTP status code
  */
-function sendJsonResponse($data, $status = 200) {
+function sendJsonResponse($data, $status = 200)
+{
     http_response_code($status);
     echo json_encode($data);
     exit;
@@ -130,7 +170,8 @@ function sendJsonResponse($data, $status = 200) {
  * Handle database errors
  * @param PDOException $e - Exception object
  */
-function handleDbError($e) {
+function handleDbError($e)
+{
     sendJsonResponse([
         'status' => 'error',
         'message' => 'Database error: ' . $e->getMessage()
@@ -143,7 +184,8 @@ function handleDbError($e) {
  * @param array $required - List of required parameters
  * @return array - Validation result
  */
-function validateParams($required) {
+function validateParams($required)
+{
     $missing = [];
     foreach ($required as $param) {
         if (!isset($_POST[$param])) {

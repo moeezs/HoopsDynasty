@@ -1,12 +1,12 @@
-<!--
+<?php
+/**
     Author: Daryl John
     Student Number: 400583895
     Date: 20-03-2025
     Description: This file contains all of the PHP functions needed to
     get the player data from the database and return it as a JSON
---> 
+ */
 
-<?php
 /**
  * Validates required parameters
  * @param array $params - Array of parameter names to validate
